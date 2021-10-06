@@ -13,5 +13,4 @@ O projeto visa criar um sistema via web/navegador de RPG, semelhante e inspirado
 - E muito mais...
 
 ### Tecnologias a serem utilizadas
-- Front-end: será utilizado React.JS (a decidir entre Javascript ou Typescript).
-- Back-end: aplicação construída em Node.JS com arquitetura REST, utilizando-se do framework Nest.JS (em Typescript).
+- Next.JS com SSR - front-end em JavaScript e back-end em Node.Js. Estrutura da aplicação em REST.
