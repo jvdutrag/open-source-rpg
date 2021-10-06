@@ -1,0 +1,71 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DB_PROVIDER_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Character {
+  id Int @id @default(autoincrement())
+  name String
+  age Int?
+  gender String?
+  player_name String?
+  current_hit_points Int @default(0)
+  max_hit_points Int @default(0)
+
+  created_at DateTime @default(now())
+
+  attributes CharacterAttributes[]
+  skills CharacterSkills[]
+  
+  @@map("character")
+}
+
+model CharacterAttributes {
+  character Character @relation(fields: [character_id], references: [id])
+  character_id Int
+  attribute Attribute @relation(fields: [attribute_id], references: [id])
+  attribute_id Int
+
+  value String?
+
+  @@id([character_id, attribute_id])
+
+  @@map("character_attributes")
+}
+
+model Attribute {
+  id Int @id @default(autoincrement())
+  name String
+  description String?
+
+  characters CharacterAttributes[]
+  
+  @@map("attribute")
+}
+
+model CharacterSkills {
+  character Character @relation(fields: [character_id], references: [id])
+  character_id Int
+  skill Skill @relation(fields: [skill_id], references: [id])
+  skill_id Int
+
+  value String?
+
+  @@id([character_id, skill_id])
+  @@map("character_skills")
+}
+
+model Skill {
+  id Int @id @default(autoincrement())
+  name String
+  description String?
+
+  characters CharacterSkills[]
+
+  @@map("skills")
+}
+
