@@ -33,4 +33,6 @@ yarn-error.log*
 # vercel
 .vercel
 
-.db
+*.db
+
+/public/assets/characters/*/

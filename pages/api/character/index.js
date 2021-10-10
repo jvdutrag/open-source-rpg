@@ -2,6 +2,16 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+function parseRelationArray(array, entityName) {
+    return array.map(item => ({
+        [entityName]: {
+            connect: {
+                id: item.id
+            }
+        }
+    }));
+}
+
 export default async function handler(req, res) {
     if(req.method === 'POST') {
         const { body } = req;
@@ -10,9 +20,20 @@ export default async function handler(req, res) {
             return res.status(400).json({ error: 'Name not set' });
         }
 
+        const attributes = await prisma.attribute.findMany();
+        const skills = await prisma.skill.findMany();
+
         const character = await prisma.character.create({
             data: {
                 ...body,
+
+                // Create Character With Many to Many Relations Set
+                attributes: {
+                    create: parseRelationArray(attributes, 'attribute')
+                },
+                skills: {
+                    create: parseRelationArray(skills, 'skill')
+                }
             },
             include: {
                 attributes: true,
@@ -25,8 +46,16 @@ export default async function handler(req, res) {
     else if(req.method === 'GET') {
         const characters = await prisma.character.findMany({
             include: {
-                attributes: true,
-                skills: true
+                attributes: {
+                    include: {
+                        attribute: true
+                    }
+                },
+                skills: {
+                    include: {
+                        skill: true
+                    }
+                }
             }
         });
 

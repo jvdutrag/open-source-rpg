@@ -1,11 +1,13 @@
-import Head from 'next/head'
-import { withStyles } from '@mui/styles'
-import { Grid, Container, Button } from '@mui/material'
-import { Add as AddIcon } from '@mui/icons-material'
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { withStyles } from '@mui/styles';
+import { Grid, Container } from '@mui/material';
 
-import { Header, DashboardBox, CharacterBox } from '../../components'
+import { Header, DashboardBox, CharacterBox, AddBox } from '../../components';
 
 import { PrismaClient } from '@prisma/client';
+
+import { api } from '../../utils';
 
 const prisma = new PrismaClient();
 
@@ -25,8 +27,46 @@ function Dashboard({
   classes,
   characters
 }) {
+  const router = useRouter();
+
+  const refreshData = () => {
+    return router.replace(router.asPath);
+  }
+
+  const createCharacter = async () => {
+    const name = prompt('Digite o nome do personagem');
+
+    if(!name) {
+      return;
+    }
+    
+    api.post('/character', { name })
+      .then(() => {
+        refreshData();
+      })
+      .catch(() => {
+        alert('Erro ao criar o personagem!');
+      });
+  }
+
+  const deleteCharacter = async id => {
+    const confirmation = confirm('Deseja apagar este personagem?');
+
+    if(!confirmation) {
+      return;
+    }
+
+    api.delete(`/character/${id}`)
+      .then(() => {
+        refreshData();
+      })
+      .catch(() => {
+        alert('Erro ao apagar este personagem!');
+      });
+  }
+
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" style={{ marginBottom: '30px' }}>
       <Head>
         <title>Dashboard do Mestre | RPG</title>
       </Head>
@@ -37,21 +77,21 @@ function Dashboard({
         <Grid item xs={12}>
           <DashboardBox
             title="Fichas e personagens"
-            renderAddButton={() => (
-              <Button variant="contained">
-                <AddIcon />
-              </Button>
-            )}
           >
             <Grid item container xs={12} spacing={3}>
               {
                 characters.map((character, index) => (
+                  <Grid item xs={12} md={4} key={index}>
                     <CharacterBox
-                      key={index}
                       character={character}
+                      deleteCharacter={deleteCharacter}
                     />
+                  </Grid>
                 ))
               }
+              <Grid item xs={12} md={4}>
+                <AddBox onClick={createCharacter} />
+              </Grid>
             </Grid>
           </DashboardBox>
         </Grid>

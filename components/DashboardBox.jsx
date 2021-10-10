@@ -1,39 +1,37 @@
 import React from 'react'
 import { withStyles } from '@mui/styles'
 
-import { Grid } from '@mui/material'
-
 const styles = theme => ({
     root: {
         border: `1px solid ${theme.palette.primary.main}`,
-        borderRadius: '3px',
-        padding: '10px'
+        borderRadius: '6px',
+        padding: '10px',
+        height: '100%'
     },
     title: {
         color: theme.palette.primary.main,
+        textTransform: 'uppercase',
         margin: 0,
-        textTransform: 'uppercase'
+        marginTop: '10px',
+        marginBottom: '10px',
+        marginLeft: '5px'
     }
 })
 
 function DashboardBox({
     children,
     classes,
-    title,
-    renderAddButton
+    title
 }) {
     return (
-        <Grid item xs={12} className={classes.root}>
-            <div style={{ float: 'right' }}>
-                {renderAddButton()}
-            </div>
+        <div className={classes.root}>
             <div>
                 <h2 className={classes.title}>{title}</h2>
             </div>
-            <div>
+            <div style={{ padding: '20px' }}>
                 {children}
             </div>
-        </Grid>
+        </div>
     )
 }
 
