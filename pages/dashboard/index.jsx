@@ -1,9 +1,12 @@
+import React, { useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { withStyles } from '@mui/styles';
 import { Grid, Container } from '@mui/material';
 
-import { Header, DashboardBox, CharacterBox, AddBox } from '../../components';
+import { Header, DashboardBox, CharacterBox, AddBox,
+  CreateCharacterModal, ConfirmationModal
+} from '../../components';
 
 import { PrismaClient } from '@prisma/client';
 
@@ -33,71 +36,89 @@ function Dashboard({
     return router.replace(router.asPath);
   }
 
-  const createCharacter = async () => {
-    const name = prompt('Digite o nome do personagem');
+  // Modals
+  const [createCharacterModal, setCreateCharacterModal] = useState(false);
+  const [confirmationModal, setConfirmationModal] = useState(false);
 
-    if(!name) {
-      return;
-    }
-    
-    api.post('/character', { name })
-      .then(() => {
-        refreshData();
-      })
-      .catch(() => {
-        alert('Erro ao criar o personagem!');
-      });
-  }
+  // State Modals
+  const [dataToConfirmationModal, setDataToConfirmationModal] = useState({
+    title: '',
+    text: '',
+    data: null
+  });
 
-  const deleteCharacter = async id => {
-    const confirmation = confirm('Deseja apagar este personagem?');
+  const openConfirmationModal = (title, text, data) => {
+    setDataToConfirmationModal({
+      title,
+      text,
+      data
+    });
 
-    if(!confirmation) {
-      return;
-    }
-
-    api.delete(`/character/${id}`)
-      .then(() => {
-        refreshData();
-      })
-      .catch(() => {
-        alert('Erro ao apagar este personagem!');
-      });
+    setConfirmationModal(true);
   }
 
   return (
-    <Container maxWidth="lg" style={{ marginBottom: '30px' }}>
-      <Head>
-        <title>Dashboard do Mestre | RPG</title>
-      </Head>
+    <>
+      <CreateCharacterModal
+        open={createCharacterModal}
+        handleClose={() => setCreateCharacterModal(false)}
+        onCharacterCreated={() => {
+          refreshData();
+        }}
+      />
+      <ConfirmationModal
+        title={dataToConfirmationModal.title}
+        text={dataToConfirmationModal.text}
+        data={dataToConfirmationModal.data}
+        open={confirmationModal}
+        handleClose={() => setConfirmationModal(false)}
+        onConfirmation={data => {
+          const { id } = data;
 
-      <Grid container item spacing={3}>
-        <Header title="Dashboard do Mestre" />
+          api.delete(`/character/${id}`)
+            .then(() => {
+              refreshData();
+            })
+            .catch(() => {
+              alert('Erro ao apagar este personagem!');
+            });
+        }}
+      />
+      
 
-        <Grid item xs={12}>
-          <DashboardBox
-            title="Fichas e personagens"
-          >
-            <Grid item container xs={12} spacing={3}>
-              {
-                characters.map((character, index) => (
-                  <Grid item xs={12} md={4} key={index}>
-                    <CharacterBox
-                      character={character}
-                      deleteCharacter={deleteCharacter}
-                    />
-                  </Grid>
-                ))
-              }
-              <Grid item xs={12} md={4}>
-                <AddBox onClick={createCharacter} />
+      <Container maxWidth="lg" style={{ marginBottom: '30px' }}>
+        <Head>
+          <title>Dashboard do Mestre | RPG</title>
+        </Head>
+
+        <Grid container item spacing={3}>
+          <Header title="Dashboard do Mestre" />
+
+          <Grid item xs={12}>
+            <DashboardBox
+              title="Fichas e personagens"
+            >
+              <Grid item container xs={12} spacing={3}>
+                {
+                  characters.map((character, index) => (
+                    <Grid item xs={12} md={4} key={index}>
+                      <CharacterBox
+                        character={character}
+                        deleteCharacter={() => openConfirmationModal('Apagar personagem', 'Deseja apagar este personagem?', { id: character.id })}
+                      />
+                    </Grid>
+                  ))
+                }
+                <Grid item xs={12} md={4}>
+                  <AddBox onClick={() => setCreateCharacterModal(true)} />
+                </Grid>
               </Grid>
-            </Grid>
-          </DashboardBox>
-        </Grid>
+            </DashboardBox>
+          </Grid>
 
-      </Grid>
-    </Container>
+        </Grid>
+      </Container>
+    </>
   )
 }
 

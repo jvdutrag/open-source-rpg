@@ -12,7 +12,7 @@ const styles = theme => ({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
-        height: '300px',
+        height: '100%',
         cursor: 'pointer'
     },
 
