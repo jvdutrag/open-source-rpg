@@ -17,7 +17,13 @@ export default async function handler(req, res) {
         return res.status(200).json(attribute);
     }
     else if(req.method === 'GET') {
-        const attributes = await prisma.attribute.findMany();
+        const attributes = await prisma.attribute.findMany({
+            orderBy: [
+                {
+                    name: 'asc',
+                }
+            ]
+        });
 
         return res.status(200).json(attributes);
     }

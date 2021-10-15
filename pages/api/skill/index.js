@@ -17,7 +17,13 @@ export default async function handler(req, res) {
         return res.status(200).json(skill);
     }
     else if(req.method === 'GET') {
-        const skills = await prisma.skill.findMany();
+        const skills = await prisma.skill.findMany({
+            orderBy: [
+                {
+                    name: 'asc',
+                }
+            ]
+        });
 
         return res.status(200).json(skills);
     }

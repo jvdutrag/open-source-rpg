@@ -5,8 +5,9 @@ const styles = theme => ({
     root: {
         border: `1px solid ${theme.palette.primary.main}`,
         borderRadius: '6px',
-        padding: '10px',
-        height: '100%'
+        padding: '15px',
+        height: '100%',
+        overflow: 'auto'
     },
     title: {
         color: theme.palette.primary.main,
@@ -21,12 +22,23 @@ const styles = theme => ({
 function DashboardBox({
     children,
     classes,
-    title
+    title,
+
+    renderButton
 }) {
     return (
         <div className={classes.root}>
-            <div>
-                <h2 className={classes.title}>{title}</h2>
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                <div>
+                    <h2 className={classes.title}>{title}</h2>
+                </div>
+                {
+                    renderButton && (
+                        <div style={{ alignSelf: 'center' }}>
+                            {renderButton()}
+                        </div>
+                    )
+                }
             </div>
             <div style={{ padding: '20px' }}>
                 {children}

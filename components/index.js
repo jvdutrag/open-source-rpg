@@ -5,6 +5,10 @@ import AddBox from './AddBox'
 
 import CreateCharacterModal from './modals/CreateCharacterModal'
 import ConfirmationModal from './modals/ConfirmationModal'
+import AttributeModal from './modals/AttributeModal'
+import SkillModal from './modals/SkillModal'
+
+import EditableRow from './EditableRow'
 
 export {
     Header,
@@ -13,5 +17,9 @@ export {
     AddBox,
 
     CreateCharacterModal,
-    ConfirmationModal
+    ConfirmationModal,
+    AttributeModal,
+    SkillModal,
+
+    EditableRow
 }
