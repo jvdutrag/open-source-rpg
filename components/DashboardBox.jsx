@@ -3,7 +3,7 @@ import { withStyles } from '@mui/styles'
 
 const styles = theme => ({
     root: {
-        border: `1px solid ${theme.palette.primary.main}`,
+        background: theme.palette.primary[600],
         borderRadius: '6px',
         padding: '15px',
         height: '100%',
