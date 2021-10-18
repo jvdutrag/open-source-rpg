@@ -5,40 +5,48 @@ import { withStyles } from '@mui/styles';
 import { Grid, Container, Button } from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material';
 
-import { Header, DashboardBox, CharacterBox, AddBox,
-  CreateCharacterModal, ConfirmationModal, EditableRow,
-  AttributeModal, SkillModal
+import {
+  Header,
+  DashboardBox,
+  CharacterBox,
+  AddBox,
+  CreateCharacterModal,
+  ConfirmationModal,
+  EditableRow,
+  AttributeModal,
+  SkillModal,
 } from '../../components';
 
 import { PrismaClient } from '@prisma/client';
 
 import { api } from '../../utils';
+import useModal from '../../hooks/useModal';
 
 const prisma = new PrismaClient();
 
 export const getServerSideProps = async () => {
   const characters = await prisma.character.findMany({
     orderBy: [
-        {
-            name: 'asc',
-        }
-    ]
+      {
+        name: 'asc',
+      },
+    ],
   });
 
   const attributes = await prisma.attribute.findMany({
     orderBy: [
-        {
-            name: 'asc',
-        }
-    ]
+      {
+        name: 'asc',
+      },
+    ],
   });
-  
+
   const skills = await prisma.skill.findMany({
     orderBy: [
-        {
-            name: 'asc',
-        }
-    ]
+      {
+        name: 'asc',
+      },
+    ],
   });
 
   const serializedCharacters = JSON.parse(JSON.stringify(characters));
@@ -49,118 +57,78 @@ export const getServerSideProps = async () => {
     props: {
       characters: serializedCharacters,
       attributes: serializedAttributes,
-      skills: serializedSkills
-    }
-  }
-}
+      skills: serializedSkills,
+    },
+  };
+};
 
 function Dashboard({
   classes,
 
   characters,
   attributes,
-  skills
+  skills,
 }) {
   const router = useRouter();
 
   const refreshData = () => {
     return router.replace(router.asPath);
-  }
+  };
 
-  // Modals
-  const [createCharacterModal, setCreateCharacterModal] = useState(false);
-  const [confirmationModal, setConfirmationModal] = useState(false);
-  const [attributeModal, setAttributeModal] = useState(false);
-  const [skillModal, setSkillModal] = useState(false);
+  const confirmationModal = useModal(({ close, custom }) => (
+    <ConfirmationModal
+      title={custom.title}
+      text={custom.text}
+      data={custom.data}
+      handleClose={close}
+      onConfirmation={(data) => {
+        const { id, type } = data;
 
-  // State Modals
-  const [dataToConfirmationModal, setDataToConfirmationModal] = useState({
-    title: '',
-    text: '',
-    data: null
-  });
+        api
+          .delete(`/${type}/${id}`)
+          .then(() => {
+            refreshData();
+          })
+          .catch(() => {
+            alert(`Erro ao apagar: ${type}`);
+          });
+      }}
+    />
+  ));
 
-  const [dataToAttributeModal, setDataToAttributeModal] = useState(null);
-  const [attributeModalOperation, setAttributeModalOperation] = useState(null);
+  const createCharacterModal = useModal(({ close }) => (
+    <CreateCharacterModal
+      handleClose={close}
+      onCharacterCreated={() => {
+        refreshData();
+      }}
+    />
+  ));
 
-  const [dataToSkillModal, setDataToSkillModal] = useState(null);
-  const [skillModalOperation, setSkillModalOperation] = useState(null);
+  const attributeModal = useModal(({ close, custom }) => (
+    <AttributeModal
+      handleClose={close}
+      data={custom.data || null}
+      onSubmit={() => {
+        refreshData();
+      }}
+      operation={custom.operation}
+    />
+  ));
 
-  const openConfirmationModal = (title, text, data) => {
-    setDataToConfirmationModal({
-      title,
-      text,
-      data
-    });
-
-    setConfirmationModal(true);
-  }
-
-  const openAttributeModal = (operation, data = null) => {
-    setDataToAttributeModal(data);
-
-    setAttributeModal(true);
-
-    setAttributeModalOperation(operation);
-  }
-
-  const openSkillModal = (operation, data = null) => {
-    setDataToSkillModal(data);
-
-    setSkillModal(true);
-
-    setSkillModalOperation(operation);
-  }
+  const skillModal = useModal(({ close, custom }) => (
+    <SkillModal
+      handleClose={close}
+      data={custom.data || null}
+      onSubmit={() => {
+        refreshData();
+      }}
+      operation={custom.operation}
+    />
+  ));
 
   return (
     <>
-      <CreateCharacterModal
-        open={createCharacterModal}
-        handleClose={() => setCreateCharacterModal(false)}
-        onCharacterCreated={() => {
-          refreshData();
-        }}
-      />
-
-      <ConfirmationModal
-        title={dataToConfirmationModal.title}
-        text={dataToConfirmationModal.text}
-        data={dataToConfirmationModal.data}
-        open={confirmationModal}
-        handleClose={() => setConfirmationModal(false)}
-        onConfirmation={data => {
-          const { id, type } = data;
-
-          api.delete(`/${type}/${id}`)
-            .then(() => {
-              refreshData();
-            })
-            .catch(() => {
-              alert(`Erro ao apagar: ${type}`);
-            });
-        }}
-      />
-
-      <AttributeModal
-        open={attributeModal}
-        handleClose={() => setAttributeModal(false)}
-        data={dataToAttributeModal}
-        onSubmit={() => {
-          refreshData();
-        }}
-        operation={attributeModalOperation}
-      />
-
-      <SkillModal
-        open={skillModal}
-        handleClose={() => setSkillModal(false)}
-        data={dataToSkillModal}
-        onSubmit={() => {
-          refreshData();
-        }}
-        operation={skillModalOperation}
-      />
-      
       <Container maxWidth="lg" style={{ marginBottom: '30px' }}>
         <Head>
           <title>Dashboard do Mestre | RPG</title>
@@ -170,22 +138,24 @@ function Dashboard({
           <Header title="Dashboard do Mestre" />
 
           <Grid item xs={12}>
-            <DashboardBox
-              title="Fichas e personagens"
-            >
+            <DashboardBox title="Fichas e personagens">
               <Grid item container xs={12} spacing={3}>
-                {
-                  characters.map((character, index) => (
-                    <Grid item xs={12} md={4} key={index}>
-                      <CharacterBox
-                        character={character}
-                        deleteCharacter={() => openConfirmationModal('Apagar personagem', 'Deseja apagar este personagem?', { id: character.id, type: 'character' })}
-                      />
-                    </Grid>
-                  ))
-                }
+                {characters.map((character, index) => (
+                  <Grid item xs={12} md={4} key={index}>
+                    <CharacterBox
+                      character={character}
+                      deleteCharacter={() =>
+                        confirmationModal.appear({
+                          title: 'Apagar personagem',
+                          text: 'Deseja apagar este personagem?',
+                          data: { id: character.id, type: 'character' },
+                        })
+                      }
+                    />
+                  </Grid>
+                ))}
                 <Grid item xs={12} md={4}>
-                  <AddBox onClick={() => setCreateCharacterModal(true)} />
+                  <AddBox onClick={() => createCharacterModal.appear()} />
                 </Grid>
               </Grid>
             </DashboardBox>
@@ -199,30 +169,38 @@ function Dashboard({
                   variant="outlined"
                   style={{
                     display: 'flex',
-                    alignSelf: 'center'
+                    alignSelf: 'center',
                   }}
-                  onClick={() => openAttributeModal('create')}
+                  onClick={() => attributeModal.appear({ operation: 'create' })}
                 >
                   <AddIcon />
                 </Button>
               )}
             >
-              <Grid item container xs={12} spacing={2} className={classes.scrollableBox}>
-                {
-                  attributes.map((attribute, index) => (
-                    <Grid item xs={12} key={index}>
-                      <EditableRow
-                        data={attribute}
-                        editRow={data => {
-                          openAttributeModal('edit', data);
-                        }}
-                        deleteRow={data => {
-                          openConfirmationModal('Apagar atributo', 'Deseja apagar este atributo?', { id: data.id, type: 'attribute' })
-                        }}
-                      />
-                    </Grid>
-                  ))
-                }
+              <Grid
+                item
+                container
+                xs={12}
+                spacing={2}
+                className={classes.scrollableBox}
+              >
+                {attributes.map((attribute, index) => (
+                  <Grid item xs={12} key={index}>
+                    <EditableRow
+                      data={attribute}
+                      editRow={(data) => {
+                        attributeModal.appear({ operation: 'edit', data });
+                      }}
+                      deleteRow={(data) => {
+                        confirmationModal.appear({
+                          title: 'Apagar atributo',
+                          text: 'Deseja apagar este atributo?',
+                          data: { id: data.id, type: 'attribute' },
+                        });
+                      }}
+                    />
+                  </Grid>
+                ))}
               </Grid>
             </DashboardBox>
           </Grid>
@@ -235,46 +213,53 @@ function Dashboard({
                   variant="outlined"
                   style={{
                     display: 'flex',
-                    alignSelf: 'center'
+                    alignSelf: 'center',
                   }}
-                  onClick={() => openSkillModal('create')}
+                  onClick={() => skillModal.appear({ operation: 'create' })}
                 >
                   <AddIcon />
                 </Button>
               )}
             >
-              <Grid item container xs={12} spacing={2} className={classes.scrollableBox}>
-                {
-                  skills.map((skill, index) => (
-                    <Grid item xs={12} key={index}>
-                      <EditableRow
-                        data={skill}
-                        editRow={data => {
-                          openSkillModal('edit', data);
-                        }}
-                        deleteRow={data => {
-                          openConfirmationModal('Apagar perícia', 'Deseja apagar esta perícia?', { id: data.id, type: 'skill' })
-                        }}
-                      />
-                    </Grid>
-                  ))
-                }
+              <Grid
+                item
+                container
+                xs={12}
+                spacing={2}
+                className={classes.scrollableBox}
+              >
+                {skills.map((skill, index) => (
+                  <Grid item xs={12} key={index}>
+                    <EditableRow
+                      data={skill}
+                      editRow={(data) => {
+                        skillModal.appear({ operation: 'edit', data })
+                      }}
+                      deleteRow={(data) => {
+                        confirmationModal.appear({
+                          title: 'Apagar perícia',
+                          text: 'Deseja apagar esta perícia?',
+                          data: { id: data.id, type: 'skill' },
+                        });
+                      }}
+                    />
+                  </Grid>
+                ))}
               </Grid>
             </DashboardBox>
           </Grid>
-
         </Grid>
       </Container>
     </>
-  )
+  );
 }
 
-const styles = theme => ({
+const styles = (theme) => ({
   scrollableBox: {
     overflow: 'auto',
     maxHeight: '300px',
-    paddingRight: '10px'
-  }
+    paddingRight: '10px',
+  },
 });
 
 export default withStyles(styles)(Dashboard);
