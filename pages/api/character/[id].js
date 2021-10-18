@@ -51,6 +51,24 @@ export default async function handler(req, res) {
 
         return res.status(200).json(character);
     }
+    else if(req.method === 'PUT') {
+        const { body } = req;
+
+        if(!body.name) {
+            return res.status(400).json({ error: 'Name not set' });
+        }
+        
+        const id = Number(req.query.id);
+    
+        const character = await prisma.character.update({
+            where: {
+                id
+            },
+            data: body
+        });
+
+        return res.status(200).json(character);
+    }
     else {
         return res.status(404);
     }

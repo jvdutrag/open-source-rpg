@@ -9,13 +9,13 @@ import { Grid, Button, TextField } from '@mui/material'
 
 const styles = theme => ({ })
 
-function EditableRow({
+const EditableRow = ({
     classes,
     data,
 
     editRow,
     deleteRow
-}) {
+}) => {
     return (
         <div className={classes.root}>
             <Grid container>

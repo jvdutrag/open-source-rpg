@@ -1,5 +1,5 @@
 import Header from './Header'
-import DashboardBox from './DashboardBox'
+import Section from './Section'
 import CharacterBox from './CharacterBox'
 import AddBox from './AddBox'
 
@@ -10,9 +10,11 @@ import SkillModal from './modals/SkillModal'
 
 import EditableRow from './EditableRow'
 
+import Loader from './Loader'
+
 export {
     Header,
-    DashboardBox,
+    Section,
     CharacterBox,
     AddBox,
 
@@ -21,5 +23,6 @@ export {
     AttributeModal,
     SkillModal,
 
-    EditableRow
+    EditableRow,
+    Loader
 }

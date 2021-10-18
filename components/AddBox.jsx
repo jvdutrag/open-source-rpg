@@ -22,10 +22,10 @@ const styles = theme => ({
     }
 })
 
-function AddBox({
+const AddBox = ({
     classes,
     ...rest
-}) {
+}) => {
     return (
         <div className={classes.root} {...rest}>
             <AddIcon className={classes.icon} />

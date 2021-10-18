@@ -5,7 +5,7 @@ import { withStyles } from '@mui/styles';
 import { Grid, Container, Button } from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material';
 
-import { Header, DashboardBox, CharacterBox, AddBox,
+import { Header, Section, CharacterBox, AddBox,
   CreateCharacterModal, ConfirmationModal, EditableRow,
   AttributeModal, SkillModal
 } from '../../components';
@@ -170,7 +170,7 @@ function Dashboard({
           <Header title="Dashboard do Mestre" />
 
           <Grid item xs={12}>
-            <DashboardBox
+            <Section
               title="Fichas e personagens"
             >
               <Grid item container xs={12} spacing={3}>
@@ -188,11 +188,11 @@ function Dashboard({
                   <AddBox onClick={() => setCreateCharacterModal(true)} />
                 </Grid>
               </Grid>
-            </DashboardBox>
+            </Section>
           </Grid>
 
           <Grid item xs={12} md={6}>
-            <DashboardBox
+            <Section
               title="Atributos"
               renderButton={() => (
                 <Button
@@ -224,11 +224,11 @@ function Dashboard({
                   ))
                 }
               </Grid>
-            </DashboardBox>
+            </Section>
           </Grid>
 
           <Grid item xs={12} md={6}>
-            <DashboardBox
+            <Section
               title="Perícias"
               renderButton={() => (
                 <Button
@@ -260,7 +260,7 @@ function Dashboard({
                   ))
                 }
               </Grid>
-            </DashboardBox>
+            </Section>
           </Grid>
 
         </Grid>

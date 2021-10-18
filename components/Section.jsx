@@ -19,13 +19,13 @@ const styles = theme => ({
     }
 })
 
-function DashboardBox({
+const Section = ({
     children,
     classes,
     title,
 
     renderButton
-}) {
+}) => {
     return (
         <div className={classes.root}>
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -47,4 +47,4 @@ function DashboardBox({
     )
 }
 
-export default withStyles(styles)(DashboardBox);
+export default withStyles(styles)(Section);

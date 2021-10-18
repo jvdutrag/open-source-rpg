@@ -37,12 +37,12 @@ const styles = theme => ({
     }
 })
 
-function CharacterBox({
+const CharacterBox = ({
     classes,
     character,
     deleteCharacter,
     ...rest
-}) {
+}) => {
     return (
         <div className={classes.root} {...rest}>
             <img

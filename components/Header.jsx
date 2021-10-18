@@ -3,10 +3,10 @@ import { withStyles } from '@mui/styles'
 
 import { Grid } from '@mui/material'
 
-function Header({
+const Header = ({
     title,
     classes
-}) {
+}) => {
     return (
         <Grid
             item
