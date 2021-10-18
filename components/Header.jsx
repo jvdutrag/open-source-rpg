@@ -12,13 +12,13 @@ function Header({
             item
             xs={12}
             justifyContent="center"
-            style={{ textAlign: 'center' }}
+            style={{ textAlign: 'center', marginTop: 50 }}
         >
             <img 
                 style={{ 
-                    width: '200px'
+                    width: '150px'
                 }}
-                src="/assets/logo.png"
+                src="/assets/logo.svg"
                 alt="Open Source RPG"
             />
             <h1
@@ -32,9 +32,8 @@ function Header({
 
 const styles = theme => ({
     title: {
-        color: '#c2c2c2',
-        margin: 0,
-        textTransform: 'uppercase'
+        color: '#FFFFFF',
+        marginTop: 60,
     }
 });
 
