@@ -8,7 +8,7 @@ O projeto visa criar um sistema via web/navegador de RPG, semelhante e inspirado
 
 ### Recursos a serem desenvolvidos projeto:
 - Integração com stream: insira informações dos personagens em tela para ser utilizado em streams, como a vida do personagem, a arte etc, em programas como o OBS Studio, a ser atualizadas em tempo real.
-- Cada personagem poderá ter sua ficha, integrada com as informações em tela.
+- Cada personagem poderá ter sua ficha, integrada com as informações em tela. Podendo escolher entre: vida, sanidade, mana, estamina.
 - O mestre terá um painel para administração do aplicativo, sendo possível alterar todas informações, adicionar novos personagens, atributos, perícias, as informações a serem mostradas no HUD em stream etc.
 - E muito mais...
 

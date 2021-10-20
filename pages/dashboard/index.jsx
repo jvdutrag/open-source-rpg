@@ -66,7 +66,7 @@ function Dashboard({
 
   const refreshData = () => {
     return router.replace(router.asPath);
-  };
+  }
 
   const confirmationModal = useModal(({ close, custom }) => (
     <ConfirmationModal
