@@ -1,11 +1,10 @@
 import React from 'react';
 import { withStyles } from '@mui/styles';
-import { Button, Grid } from '@mui/material';
+import { Button } from '@mui/material';
 
 import {
   Link as LinkIcon,
   Delete as DeleteIcon,
-  Edit as EditIcon,
   Favorite as HeartIcon,
   FavoriteBorder as HeartIconNoLife,
 } from '@mui/icons-material';
@@ -17,7 +16,6 @@ const styles = (theme) => ({
     padding: '15px',
     width: '100%',
     display: 'flex',
-    justifyContent: 'center',
     alignItems: 'center',
     minHeight: '121px',
     gap: '20px',
@@ -47,7 +45,6 @@ const styles = (theme) => ({
   },
 
   btn: {
-    color: '#fff',
     width: 40,
     height: 40,
     minWidth: 40,
@@ -59,7 +56,7 @@ function CharacterBox({ classes, character, deleteCharacter, ...rest }) {
   return (
     <div className={classes.root} {...rest}>
       <img
-        src={`/assets/user.png`}
+        src={`/assets/default.png`}
         alt="Character Portrait"
         className={classes.characterImage}
       />
@@ -94,7 +91,7 @@ function CharacterBox({ classes, character, deleteCharacter, ...rest }) {
         >
           <div>
             <Button
-              variant="contained"
+              variant="outlined"
               href={`/sheet/${character.id}`}
               target="_blank"
               className={classes.btn}
@@ -103,18 +100,10 @@ function CharacterBox({ classes, character, deleteCharacter, ...rest }) {
             </Button>
           </div>
           <div>
-            <Button variant="contained" className={classes.btn}>
-              <EditIcon />
-            </Button>
-          </div>
-          <div>
             <Button
-              variant="contained"
+              variant="outlined"
               onClick={() => deleteCharacter(character.id)}
               className={classes.btn}
-              style={{
-                color: '#FF4B5C'
-              }}
             >
               <DeleteIcon />
             </Button>
