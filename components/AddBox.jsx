@@ -4,7 +4,7 @@ import { Add as AddIcon } from '@mui/icons-material'
 
 const styles = theme => ({
     root: {
-        background: theme.pallete.primary[900],
+        background: theme.palette.primary[900],
         borderRadius: '3px',
         padding: '15px',
         width: '100%',
