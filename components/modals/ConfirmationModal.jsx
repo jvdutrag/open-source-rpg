@@ -11,7 +11,6 @@ const styles = theme => ({
 
 function ConfirmationModal({
     classes,
-    open,
     handleClose,
     title,
     text,
@@ -20,7 +19,7 @@ function ConfirmationModal({
 }) {
     return (
         <Dialog
-            open={open}
+            open={true}
             onClose={handleClose}
         >
             <DialogTitle>{title}</DialogTitle>

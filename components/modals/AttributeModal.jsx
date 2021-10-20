@@ -13,7 +13,6 @@ const styles = theme => ({
 
 function AttributeModal({
     classes,
-    open,
     handleClose,
 
     onSubmit,
@@ -82,7 +81,7 @@ function AttributeModal({
 
     return (
         <Dialog
-            open={open}
+            open={true}
             onClose={handleClose}
         >
             <DialogTitle>

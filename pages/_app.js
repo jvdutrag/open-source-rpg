@@ -3,6 +3,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 
 import theme from '../theme'
+import { ModalProvider } from '../contexts/ModalContext';
 
 import '../styles/globals.css'
 
@@ -18,8 +19,10 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Component {...pageProps} />
+        <ModalProvider>
+          <CssBaseline />
+          <Component {...pageProps} />
+        </ModalProvider>
       </ThemeProvider>
     </>
   )

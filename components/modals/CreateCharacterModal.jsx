@@ -13,7 +13,6 @@ const styles = theme => ({
 
 function CreateCharacterModal({
     classes,
-    open,
     handleClose,
     onCharacterCreated
 }) {
@@ -49,7 +48,7 @@ function CreateCharacterModal({
 
     return (
         <Dialog
-            open={open}
+            open={true}
             onClose={handleClose}
         >
             <DialogTitle>Criar novo personagem</DialogTitle>

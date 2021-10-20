@@ -4,7 +4,7 @@ import { Add as AddIcon } from '@mui/icons-material'
 
 const styles = theme => ({
     root: {
-        border: `1px dashed ${theme.palette.primary.main}`,
+        background: theme.pallete.primary[900],
         borderRadius: '3px',
         padding: '15px',
         width: '100%',
@@ -13,7 +13,7 @@ const styles = theme => ({
         alignItems: 'center',
         flexDirection: 'column',
         height: '100%',
-        cursor: 'pointer'
+        cursor: 'pointer',
     },
 
     icon: {
