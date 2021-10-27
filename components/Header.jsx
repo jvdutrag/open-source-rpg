@@ -1,6 +1,8 @@
 import React from 'react'
 import { withStyles } from '@mui/styles'
 
+import Image from 'next/image';
+
 import { Grid } from '@mui/material'
 
 const Header = ({
@@ -14,7 +16,7 @@ const Header = ({
             justifyContent="center"
             style={{ textAlign: 'center', marginTop: 50 }}
         >
-            <img 
+            <Image 
                 style={{ 
                     width: '150px'
                 }}

@@ -2,6 +2,8 @@ import React from 'react';
 import { withStyles } from '@mui/styles';
 import { Button } from '@mui/material';
 
+import Image from 'next/image';
+
 import {
   Link as LinkIcon,
   Delete as DeleteIcon,
@@ -55,7 +57,7 @@ const styles = (theme) => ({
 function CharacterBox({ classes, character, deleteCharacter, ...rest }) {
   return (
     <div className={classes.root} {...rest}>
-      <img
+      <Image
         src={`/assets/default.png`}
         alt="Character Portrait"
         className={classes.characterImage}

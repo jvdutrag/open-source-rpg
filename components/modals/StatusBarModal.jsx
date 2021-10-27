@@ -33,7 +33,7 @@ function StatusBarModal({
             current: data.current,
             max: data.max
         });
-    }, [data]);
+    }, [data, newData]);
     
     const resetState = () => {
         return setNewData({

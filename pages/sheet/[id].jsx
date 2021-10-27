@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
+import Image from 'next/image';
 
 import { Grid, Container } from '@mui/material';
 import { withStyles } from '@mui/styles';
@@ -57,12 +58,6 @@ function Sheet({
   classes,
   rawCharacter
 }) {
-  if(!rawCharacter) {
-    return (
-      <div>Personagem não existe!</div>
-    );
-  }
-
   const [character, setCharacter] = useState(rawCharacter);
 
   const onCharacterInfoSubmit = async values => {
@@ -101,7 +96,7 @@ function Sheet({
 
   useEffect(() => {
     setCharacter(rawCharacter);
-  }, []);
+  }, [rawCharacter]);
 
   const updateCharacterState = data => {
     return setCharacter(prevState => ({
@@ -123,6 +118,12 @@ function Sheet({
       }}
     />
   ));
+
+  if(!rawCharacter) {
+    return (
+      <div>Personagem não existe!</div>
+    );
+  }
 
   return (
     <Container maxWidth="lg" style={{ marginBottom: '30px' }}>
@@ -152,7 +153,7 @@ function Sheet({
               <Section>
                 <Grid container item xs={12} spacing={3}>
                   <Grid item xs={12} className={classes.alignCenter}>
-                    <img
+                    <Image
                       src={`/assets/default.png`}
                       alt="Character Portrait"
                       className={classes.characterImage}
