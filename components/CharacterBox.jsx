@@ -61,6 +61,8 @@ function CharacterBox({ classes, character, deleteCharacter, ...rest }) {
         src={`/assets/default.png`}
         alt="Character Portrait"
         className={classes.characterImage}
+        width="75"
+        height="75"
       />
       <div className={classes.mainInformations}>
         <span className={classes.characterName}>{character.name}</span>

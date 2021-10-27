@@ -16,12 +16,11 @@ const Header = ({
             justifyContent="center"
             style={{ textAlign: 'center', marginTop: 50 }}
         >
-            <Image 
-                style={{ 
-                    width: '150px'
-                }}
+            <Image
                 src="/assets/logo.svg"
                 alt="Open Source RPG"
+                width="150"
+                height="55"
             />
             <h1
                 className={classes.title}
