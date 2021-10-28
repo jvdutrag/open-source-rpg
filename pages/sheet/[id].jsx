@@ -9,7 +9,7 @@ import { PrismaClient } from '@prisma/client';
 import { api } from '../../utils';
 
 import {
-  Header, Section, StatusBar, StatusBarModal
+  Header, Section, StatusBar, StatusBarModal, SheetEditableRow
 } from '../../components';
 
 import {
@@ -34,6 +34,18 @@ export const getServerSideProps = async ({ params }) => {
   const character = await prisma.character.findUnique({
     where: {
       id: characterId
+    },
+    include: {
+        attributes: {
+            include: {
+                attribute: true
+            }
+        },
+        skills: {
+            include: {
+                skill: true
+            }
+        }
     }
   });
 
@@ -119,6 +131,38 @@ function Sheet({
     />
   ));
 
+  const updateCharacterAttributeValue = (attribute, value) => {
+    const index = character.attributes.findIndex(a => a.attribute_id === attribute.attribute_id);
+
+    const newArray = character.attributes;
+
+    newArray[index] = {
+      ...attribute,
+      value
+    }
+
+    setCharacter(prevState => ({
+      ...prevState,
+      attributes: newArray
+    }));
+  }
+
+  const updateCharacterSkillValue = (skill, value) => {
+    const index = character.skills.findIndex(s => s.skill_id === skill.skill_id);
+
+    const newArray = character.skills;
+
+    newArray[index] = {
+      ...skill,
+      value
+    }
+
+    setCharacter(prevState => ({
+      ...prevState,
+      skills: newArray
+    }));
+  }
+
   if(!rawCharacter) {
     return (
       <div>Personagem não existe!</div>
@@ -180,6 +224,74 @@ function Sheet({
                       </Grid>
                     </Grid>
                   </Grid>
+                </Grid>
+              </Section>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Section
+                title="Atributos"
+              >
+                <Grid container item xs={12} spacing={3}>
+                  {
+                    character.attributes.map(each => (
+                      <Grid item xs={6}>
+                        <SheetEditableRow
+                          data={{
+                            name: each.attribute.name,
+                            value: each.value,
+                            description: each.attribute.description
+                          }}
+                          onValueChange={newValue => {
+                            api.put('/character/attribute', {
+                              character_id: character.id,
+                              attribute_id: each.attribute.id,
+                              value: newValue
+                            })
+                            .catch(err => {
+                              alert(`Erro ao atualizar o valor! Erro: ${err.toString()}`);
+                            })
+                          }}
+                          onInput={newValue => {
+                            updateCharacterAttributeValue(each, newValue);
+                          }}
+                        />
+                      </Grid>
+                    ))
+                  }
+                </Grid>
+              </Section>
+            </Grid>
+            <Grid item xs={12}>
+              <Section
+                title="Perícias"
+              >
+                <Grid container item xs={12} spacing={3}>
+                  {
+                    character.skills.map(each => (
+                      <Grid item xs={4}>
+                        <SheetEditableRow
+                          data={{
+                            name: each.skill.name,
+                            value: each.value,
+                            description: each.skill.description
+                          }}
+                          onValueChange={newValue => {
+                            api.put('/character/skill', {
+                              character_id: character.id,
+                              skill_id: each.skill.id,
+                              value: newValue
+                            })
+                            .catch(err => {
+                              alert(`Erro ao atualizar o valor! Erro: ${err.toString()}`);
+                            })
+                          }}
+                          onInput={newValue => {
+                            updateCharacterSkillValue(each, newValue);
+                          }}
+                        />
+                      </Grid>
+                    ))
+                  }
                 </Grid>
               </Section>
             </Grid>

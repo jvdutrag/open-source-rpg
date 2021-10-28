@@ -8,8 +8,10 @@ import ConfirmationModal from './modals/ConfirmationModal'
 import AttributeModal from './modals/AttributeModal'
 import SkillModal from './modals/SkillModal'
 import StatusBarModal from './modals/StatusBarModal'
+import InfoModal from './modals/InfoModal'
 
 import EditableRow from './EditableRow'
+import SheetEditableRow from './SheetEditableRow'
 
 import Loader from './Loader'
 
@@ -26,9 +28,12 @@ export {
     AttributeModal,
     SkillModal,
     StatusBarModal,
+    InfoModal,
 
     EditableRow,
     Loader,
 
-    StatusBar
+    StatusBar,
+
+    SheetEditableRow
 }

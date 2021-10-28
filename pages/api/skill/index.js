@@ -14,6 +14,18 @@ export default async function handler(req, res) {
             data: body
         });
 
+        // Assign Created Skill to All Characters
+        const characters = await prisma.character.findMany();
+
+        characters.forEach(async character => {
+            await prisma.characterSkills.create({
+                data: {
+                    character_id: character.id,
+                    skill_id: skill.id
+                }
+            });
+        });
+
         return res.status(200).json(skill);
     }
     else if(req.method === 'GET') {

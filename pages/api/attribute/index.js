@@ -14,6 +14,18 @@ export default async function handler(req, res) {
             data: body
         });
 
+        // Assign Created Attribute to All Characters
+        const characters = await prisma.character.findMany();
+
+        characters.forEach(async character => {
+            await prisma.characterAttributes.create({
+                data: {
+                    character_id: character.id,
+                    attribute_id: attribute.id
+                }
+            });
+        });
+
         return res.status(200).json(attribute);
     }
     else if(req.method === 'GET') {
