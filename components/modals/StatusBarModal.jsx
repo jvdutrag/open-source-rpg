@@ -5,8 +5,6 @@ import {
     DialogTitle, Button
 } from '@mui/material'
 
-import { api } from '../../utils';
-
 const styles = theme => ({
 
 })
@@ -33,7 +31,7 @@ function StatusBarModal({
             current: data.current,
             max: data.max
         });
-    }, [data, newData]);
+    }, []);
     
     const resetState = () => {
         return setNewData({
