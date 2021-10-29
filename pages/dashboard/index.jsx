@@ -53,7 +53,7 @@ export const getServerSideProps = async () => {
       skills: serializedSkills,
     },
   };
-};
+}
 
 function Dashboard({
   classes,

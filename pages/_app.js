@@ -5,7 +5,7 @@ import { CssBaseline } from '@mui/material';
 import theme from '../theme'
 import { ModalProvider } from '../contexts/ModalContext';
 
-import '../styles/globals.css'
+import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }) {
 

@@ -8,6 +8,8 @@ import { PrismaClient } from '@prisma/client';
 
 import { api } from '../../utils';
 
+import socket from '../../utils/socket';
+
 import {
   Header, Section, StatusBar, StatusBarModal, SheetEditableRow
 } from '../../components';
@@ -97,6 +99,8 @@ function Sheet({
           updateCharacterState(data);
 
           resolve();
+
+          socket.emit('update_hit_points', { current: data.current_hit_points, max: data.max_hit_points });
         })
         .catch(err => {
           alert(`Erro ao atualizar a vida!`, err);
@@ -198,7 +202,7 @@ function Sheet({
                 <Grid container item xs={12} spacing={3}>
                   <Grid item xs={12} className={classes.alignCenter}>
                     <Image
-                      src={`/assets/default.png`}
+                      src={`/assets/characters/${character.id}/1.png`}
                       alt="Character Portrait"
                       className={classes.characterImage}
                       width="200"
