@@ -233,8 +233,8 @@ function Sheet({
               >
                 <Grid container item xs={12} spacing={3}>
                   {
-                    character.attributes.map(each => (
-                      <Grid item xs={6}>
+                    character.attributes.map((each, index) => (
+                      <Grid item xs={6} key={index}>
                         <SheetEditableRow
                           data={{
                             name: each.attribute.name,
@@ -267,8 +267,8 @@ function Sheet({
               >
                 <Grid container item xs={12} spacing={3}>
                   {
-                    character.skills.map(each => (
-                      <Grid item xs={4}>
+                    character.skills.map((each, index) => (
+                      <Grid item xs={4} key={index}>
                         <SheetEditableRow
                           data={{
                             name: each.skill.name,
