@@ -1,16 +1,23 @@
-# Open Source RPG App
-An open source RPG web app that contains integration for streaming tools, character creation, game master dashboard, etc.
-
-Currently in portuguese only.
+# Open Source RPG
 
 ## Sobre
-O projeto visa criar um sistema via web/navegador de RPG, semelhante e inspirado no usado pela série de RPG [Ordem Paranormal](https://ordemparanormal.com.br/), com integrações em stream, criação de personagens, painel para o mestre, etc.
+O projeto visa criar um sistema via web/navegador de RPG, semelhante e inspirado no usado pela série de RPG [Ordem Paranormal](https://ordemparanormal.com.br/), com integrações em stream, criação de personagens, painel para o mestre, etc. É almejado o público leigo: então não necessariamente você vai precisar saber programar para utilizar o sistema.
 
-### Recursos a serem desenvolvidos projeto:
-- Integração com stream: insira informações dos personagens em tela para ser utilizado em streams, como a vida do personagem, a arte etc, em programas como o OBS Studio, a ser atualizadas em tempo real.
-- Cada personagem poderá ter sua ficha, integrada com as informações em tela. Podendo escolher entre: vida, sanidade, mana, estamina.
-- O mestre terá um painel para administração do aplicativo, sendo possível alterar todas informações, adicionar novos personagens, atributos, perícias, as informações a serem mostradas no HUD em stream etc.
-- E muito mais...
+O objetivo principal é criar simples, porém funcional, que sirva para qualquer sistema de RPG de mesa (Tormenta, D&D, CoC, etc.). Então, este repositório atual conterá apenas a base simples, com funções básicas para suprir a necessidade da maioria dos sistemas. Se você precisar de algo extremamente específico, dê um fork no repositório e faça sua versão by yourself.
 
-### Tecnologias a serem utilizadas
-- Next.JS com SSR - front-end em JavaScript e back-end em Node.Js. Estrutura da aplicação em REST.
+Quando o projeto estiver minimamente finalizado, um guia será disponibilizado para leigos sobre como fazer o projeto funcionar.
+
+### Recursos
+- ✔️ Ficha de personagem
+- ✔️ Painel do mestre para manipular o sistema
+- Integração com o OBS (software de streaming) através de Browser Sources
+- Rolagem de dados (integrada com o OBS)
+- Personalização completa da integração com o OBS
+- Recursos adicionais opcionais: sanidade, mana, estamina, inventário, etc.
+- Recurso adicional geral para o controle do mestre e do software
+
+### Tecnologias sendo utilizadas
+- Next.JS com SSR (Server-Side Rendering) e API REST
+- Prisma como tecnologia ORM
+- Banco de dados relacional SQLite (porém o Prisma aceita qualquer outro)
+- Socket.io para comunicação em tempo real entre o servidor e o cliente
