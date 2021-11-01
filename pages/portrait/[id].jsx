@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
-import { Container } from '@mui/material';
 import { withStyles } from '@mui/styles';
 import { PrismaClient } from '@prisma/client';
 
@@ -48,7 +48,17 @@ function Portrait({
   classes,
   character
 }) {
+    const router = useRouter();
+
+    const { show: showOptions } = router.query;
+    
     const [isDead, setIsDead] = useState(false);
+
+    const [showOnly, setShowOnly] = useState({
+      picture: false,
+      name: false,
+      stats: false
+    });
 
     const [hitPoints, setHitPoints] = useState({
       current: 0,
@@ -82,6 +92,17 @@ function Portrait({
     }
 
     useEffect(() => {
+      document.body.style.backgroundColor = 'transparent';
+
+      const splitShowOptions = showOptions.split(',');
+
+      splitShowOptions.forEach(option => {
+        setShowOnly(prevState => ({
+          ...prevState,
+          [option]: true
+        }));
+      });
+
       updateHitPoints({
         current: character.current_hit_points,
         max: character.max_hit_points
@@ -103,29 +124,58 @@ function Portrait({
     }, [socket]);
 
     return (
-      <Container className={classes.root}>
+      <React.Fragment>
         <Head>
             <title>Portrait de {character.name} | RPG</title>
         </Head>
-        <div style={{ backgroundColor: 'lightblue', color: 'black', fontSize: '50px' }}>
+        <div className={classes.container}>
+          <div style={{ display: showOnly.picture ? 'block' : 'none' }}>
             <Image
-              width={300}
-              height={300}
+              width={400}
+              height={600}
+              layout="fixed"
               src={getCharacterPicture()}
-              className={isDead ? classes.deadCharacterPicture : ''}
+              className={isDead ? classes.deadPicture : ''}
             />
-            {hitPoints.current}/{hitPoints.max}
+          </div>
+          <div>
+              <div className={classes.name} style={{ display: showOnly.name ? 'block' : 'none' }}>
+                {character.name}
+              </div>
+              <div style={{ display: showOnly.stats ? 'block' : 'none' }}>
+                <span className={classes.hitPoints}>
+                  {hitPoints.current}/{hitPoints.max}
+                </span>
+              </div>
+          </div>
         </div>
-      </Container>
+      </React.Fragment>
     )
 }
 
 const styles = (theme) => ({
-  root: {
-    backgroundColor: 'transparent'
+  container: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    fontFamily: 'Fruktur'
   },
 
-  deadCharacterPicture: {
+  name: {
+    textTransform: 'uppercase',
+    fontSize: '72px',
+    color: '#fff',
+    textShadow: '0 0 10px #FFFFFF'
+  },
+
+  hitPoints: {
+    textTransform: 'uppercase',
+    fontSize: '62px',
+    color: '#ffe2e2',
+    textShadow: '0 0 10px #ff0000'
+  },
+
+  deadPicture: {
     filter: 'brightness(0%)'
   }
 });

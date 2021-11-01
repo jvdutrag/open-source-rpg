@@ -205,8 +205,8 @@ function Sheet({
                       src={`/assets/characters/${character.id}/1.png`}
                       alt="Character Portrait"
                       className={classes.characterImage}
-                      width="200"
-                      height="200"
+                      width={140}
+                      height={200}
                     />
                   </Grid>
                   <Grid item xs={12} className={classes.alignCenter}>
