@@ -167,6 +167,23 @@ function Sheet({
     }));
   }
 
+  const getCharacterPictureURL = () => {
+    if(!character) {
+      return;
+    }
+
+    let pictureNumber;
+
+    if(character.current_hit_points > (character.max_hit_points / 2)) {
+      pictureNumber = 1;
+    }
+    else {
+      pictureNumber = 2;
+    }
+
+    return `/assets/characters/${character.id}/${pictureNumber}.png`;
+  }
+
   if(!rawCharacter) {
     return (
       <div>Personagem não existe!</div>
@@ -202,7 +219,7 @@ function Sheet({
                 <Grid container item xs={12} spacing={3}>
                   <Grid item xs={12} className={classes.alignCenter}>
                     <Image
-                      src={`/assets/characters/${character.id}/1.png`}
+                      src={getCharacterPictureURL()}
                       alt="Character Portrait"
                       className={classes.characterImage}
                       width={140}
