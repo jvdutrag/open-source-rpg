@@ -10,7 +10,6 @@ const nextHandler = nextApp.getRequestHandler();
 
 io.on('connect', socket => {
     socket.on('room:join', roomName => {
-        console.log('entrou na sala', roomName)
         return socket.join(roomName);
     });
 
@@ -29,6 +28,6 @@ nextApp.prepare().then(() => {
             throw err;
         }
 
-        console.log('[Server] Successfully started');
+        console.log('[Server] Successfully started on port', process.env.PORT || 3000);
     });
 })

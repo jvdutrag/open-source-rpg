@@ -22,6 +22,7 @@ model Character {
 
   attributes CharacterAttributes[]
   skills CharacterSkills[]
+  rolls Roll[]
   
   @@map("character")
 }
@@ -71,3 +72,16 @@ model Skill {
   @@map("skills")
 }
 
+model Roll {
+  id Int @id @default(autoincrement())
+
+  max_number Int
+  rolled_number Int
+
+  character   Character @relation(fields: [character_id], references: [id])
+  character_id Int
+
+  rolled_at DateTime @default(now())
+  
+  @@map("roll")
+}
