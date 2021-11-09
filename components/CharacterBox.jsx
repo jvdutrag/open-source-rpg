@@ -9,7 +9,12 @@ import {
   Delete as DeleteIcon,
   Favorite as HeartIcon,
   FavoriteBorder as HeartIconNoLife,
+  Note as PaperIcon
 } from '@mui/icons-material';
+
+import useModal from '../hooks/useModal';
+
+import GeneratePortraitModal from './modals/GeneratePortraitModal';
 
 const styles = (theme) => ({
   root: {
@@ -55,14 +60,38 @@ const styles = (theme) => ({
 });
 
 function CharacterBox({ classes, character, deleteCharacter, ...rest }) {
+  const getCharacterPictureURL = () => {
+    if(!character) {
+      return null;
+    }
+
+    let pictureNumber;
+
+    if(character.current_hit_points > (character.max_hit_points / 2)) {
+      pictureNumber = 1;
+    }
+    else {
+      pictureNumber = 2;
+    }
+
+    return `/assets/characters/${character.id}/${pictureNumber}.png`;
+  }
+
+  const generatePortraitModal = useModal(({ close, custom }) => (
+    <GeneratePortraitModal
+      handleClose={close}
+      characterId={custom.characterId}
+    />
+  ));
+
   return (
     <div className={classes.root} {...rest}>
       <Image
-        src={`/assets/default.png`}
+        src={getCharacterPictureURL()}
         alt="Character Portrait"
         className={classes.characterImage}
-        width="75"
-        height="75"
+        width={70}
+        height={100}
       />
       <div className={classes.mainInformations}>
         <span className={classes.characterName}>{character.name}</span>
@@ -99,6 +128,15 @@ function CharacterBox({ classes, character, deleteCharacter, ...rest }) {
               href={`/sheet/${character.id}`}
               target="_blank"
               className={classes.btn}
+            >
+              <PaperIcon />
+            </Button>
+          </div>
+          <div>
+            <Button
+              variant="outlined"
+              className={classes.btn}
+              onClick={() => generatePortraitModal.appear({ characterId: character.id })}
             >
               <LinkIcon />
             </Button>

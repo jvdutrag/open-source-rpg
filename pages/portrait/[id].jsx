@@ -50,7 +50,7 @@ function Portrait({
 }) {
     const router = useRouter();
 
-    const { show: showOptions } = router.query;
+    const showOptions = router.query.show || '';
     
     const [isDead, setIsDead] = useState(false);
 

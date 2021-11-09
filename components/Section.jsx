@@ -16,6 +16,13 @@ const styles = theme => ({
         marginTop: '10px',
         marginBottom: '10px',
         marginLeft: '5px'
+    },
+    subtitle: {
+        color: theme.palette.secondary.main,
+        margin: 0,
+        marginTop: '10px',
+        marginBottom: '10px',
+        marginLeft: '5px'
     }
 })
 
@@ -23,6 +30,7 @@ const Section = ({
     children,
     classes,
     title,
+    subtitle,
 
     renderButton
 }) => {
@@ -31,6 +39,7 @@ const Section = ({
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                 <div>
                     <h2 className={classes.title}>{title}</h2>
+                    <span className={classes.subtitle}>{subtitle}</span>
                 </div>
                 {
                     renderButton && (

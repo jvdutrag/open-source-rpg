@@ -169,7 +169,7 @@ function Sheet({
 
   const getCharacterPictureURL = () => {
     if(!character) {
-      return;
+      return null;
     }
 
     let pictureNumber;

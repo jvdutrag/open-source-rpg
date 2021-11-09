@@ -9,6 +9,7 @@ import AttributeModal from './modals/AttributeModal'
 import SkillModal from './modals/SkillModal'
 import StatusBarModal from './modals/StatusBarModal'
 import InfoModal from './modals/InfoModal'
+import GeneratePortraitModal from './modals/GeneratePortraitModal'
 
 import EditableRow from './EditableRow'
 import SheetEditableRow from './SheetEditableRow'
@@ -16,6 +17,8 @@ import SheetEditableRow from './SheetEditableRow'
 import Loader from './Loader'
 
 import StatusBar from './StatusBar'
+
+import TextFieldIcon from './TextFieldIcon'
 
 export {
     Header,
@@ -29,11 +32,14 @@ export {
     SkillModal,
     StatusBarModal,
     InfoModal,
+    GeneratePortraitModal,
 
     EditableRow,
     Loader,
 
     StatusBar,
 
-    SheetEditableRow
+    SheetEditableRow,
+
+    TextFieldIcon
 }
