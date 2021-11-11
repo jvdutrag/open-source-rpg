@@ -10,7 +10,7 @@ Quando o projeto estiver minimamente finalizado, um guia será disponibilizado p
 ### Recursos
 - ✔️ Ficha de personagem
 - ✔️ Painel do mestre para manipular o sistema
-- Integração com o OBS (software de streaming) através de Browser Sources
+- ✔️ Integração com o OBS (software de streaming) através de Browser Sources
 - Rolagem de dados (integrada com o OBS)
 - Personalização completa da integração com o OBS
 - Recursos adicionais opcionais: sanidade, mana, estamina, inventário, etc.
