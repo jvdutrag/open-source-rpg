@@ -36,3 +36,5 @@ yarn-error.log*
 *.db
 
 /public/assets/characters/*/
+
+.env
