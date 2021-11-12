@@ -21,9 +21,13 @@ function DiceRollModal({
     const [timesToRoll, setTimesToRoll] = useState(1);
     const [facesNumber, setFacesNumber] = useState(6);
 
+    const [buttonDisabled, setButtonDisabled] = useState(false);
+
     const [result, setResult] = useState(null);
 
     const rollDice = () => {
+        setButtonDisabled(true);
+
         if(!timesToRoll || !facesNumber) {
             return window.alert('É necessário escolher todos os campos!');
         }
@@ -39,6 +43,8 @@ function DiceRollModal({
         })
         .then(res => {
             setResult(res.data);
+
+            setButtonDisabled(false);
 
             onDiceRoll(res.data);
         })
@@ -159,6 +165,7 @@ function DiceRollModal({
                         onClick={() => {
                             return result ? setResult(null) : rollDice()
                         }}
+                        disabled={buttonDisabled}
                     >
                         {result ? 'Rolar Outro Dado' : 'Rolar'}
                     </Button>

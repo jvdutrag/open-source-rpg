@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
+import Queue from 'js-queue';
 
 import { withStyles } from '@mui/styles';
 import { PrismaClient } from '@prisma/client';
@@ -46,6 +47,8 @@ function Dice({
   classes,
   character
 }) {
+  const queue = new Queue();
+
   const [currentDice, setCurrentDice] = useState(null);
 
   useEffect(() => {
@@ -58,19 +61,28 @@ function Dice({
     )
   }
 
+  function showDiceOnScreen(roll) {
+    setCurrentDice(roll);
+
+    // Run After 5 seconds
+    setTimeout(() => {
+      // Remove Dice
+      setCurrentDice(null);
+    }, 5 * 1000);
+
+    // Run After 8 seconds
+    setTimeout(() => {
+      this.next();
+    }, 8 * 1000);
+  }
+
   useEffect(() => {
     socket.emit('room:join', `dice_character_${character.id}`);
 
     socket.on('dice_roll', data => {
-      if(data.rolls.length > 1) {
-        return;
-      }
-
-      setCurrentDice(data.rolls[0]);
-
-      setTimeout(() => {
-        setCurrentDice(null);
-      }, 5 * 1000);
+      data.rolls.forEach(roll => {
+        queue.add(showDiceOnScreen.bind(queue, roll));
+      });
     });
   }, [socket]);
 
@@ -80,11 +92,20 @@ function Dice({
           <title>Dados de {character.name} | RPG</title>
       </Head>
       <div className={classes.container}>
-        {
-          currentDice && (
-            <h1 style={{ fontSize: '100px', color: '#fff' }}>{currentDice.rolled_number}</h1>
-          )
-        }
+          {
+            currentDice && (
+              <div className={classes.diceContainer}>
+                  <div>
+                    <video width="600" height="600" autoPlay muted className={classes.diceVideo}>
+                      <source src="/assets/dice.webm" type="video/webm" />
+                    </video>
+                  </div>
+                  <div className={classes.diceResult}>
+                    <span className={classes.diceNumber}>{currentDice.rolled_number}</span>
+                  </div>
+              </div>
+            )
+          }
       </div>
     </React.Fragment>
   )
@@ -95,7 +116,24 @@ const styles = (theme) => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    fontFamily: 'Fruktur'
+    fontFamily: 'Fruktur',
+    userSelect: 'none'
+  },
+  diceContainer: {
+    position: 'relative'
+  },
+  diceResult: {
+    position: 'absolute',
+    top: '180px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%'
+  },
+  diceNumber: {
+    zIndex: 2,
+    fontSize: '150px',
+    textShadow: '0 0 10px #FFFFFF'
   }
 });
 
