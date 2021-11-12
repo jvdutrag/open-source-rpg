@@ -116,7 +116,7 @@ function Portrait({
     }
 
     useEffect(() => {
-      socket.emit('room:join', 'portrait');
+      socket.emit('room:join', `portrait_character_${character.id}`);
 
       socket.on('update_hit_points', data => {
         updateHitPoints(data);

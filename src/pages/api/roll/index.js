@@ -36,12 +36,12 @@ export default async function handler(req, res) {
                 character_id: Number(body.character_id)
             }
 
-            await prisma.roll.create({
-                data: rollObject
-            });
-
             rolls.push(rollObject);
         }
+
+        await prisma.roll.createMany({
+            data: rolls
+        });
 
         return res.status(200).json(rolls);
     }

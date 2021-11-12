@@ -10,6 +10,7 @@ import SkillModal from './modals/SkillModal'
 import StatusBarModal from './modals/StatusBarModal'
 import InfoModal from './modals/InfoModal'
 import GeneratePortraitModal from './modals/GeneratePortraitModal'
+import DiceRollModal from './modals/DiceRollModal'
 
 import EditableRow from './EditableRow'
 import SheetEditableRow from './SheetEditableRow'
@@ -33,6 +34,7 @@ export {
     StatusBarModal,
     InfoModal,
     GeneratePortraitModal,
+    DiceRollModal,
 
     EditableRow,
     Loader,

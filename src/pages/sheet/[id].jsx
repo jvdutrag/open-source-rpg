@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 
-import { Grid, Container } from '@mui/material';
+import { Grid, Container, Button } from '@mui/material';
 import { withStyles } from '@mui/styles';
 import { PrismaClient } from '@prisma/client';
 
@@ -11,7 +11,9 @@ import { api } from '../../utils';
 import socket from '../../utils/socket';
 
 import {
-  Header, Section, StatusBar, StatusBarModal, SheetEditableRow
+  Header, Section, StatusBar, SheetEditableRow, 
+
+  DiceRollModal, StatusBarModal
 } from '../../components';
 
 import {
@@ -100,7 +102,7 @@ function Sheet({
 
           resolve();
 
-          socket.emit('update_hit_points', { current: data.current_hit_points, max: data.max_hit_points });
+          socket.emit('update_hit_points', { character_id: character.id, current: data.current_hit_points, max: data.max_hit_points });
         })
         .catch(err => {
           alert(`Erro ao atualizar a vida!`, err);
@@ -132,6 +134,24 @@ function Sheet({
         current: character.current_hit_points,
         max: character.max_hit_points
       }}
+    />
+  ));
+
+  const diceRollModal = useModal(({ close }) => (
+    <DiceRollModal
+      onDiceRoll={rollData => {
+        const parsedData = {
+          character_id: character.id,
+          rolls: rollData.map(each => ({
+            rolled_number: each.rolled_number,
+            max_number: each.max_number
+          }))
+        }
+
+        socket.emit('dice_roll', parsedData);
+      }}
+      handleClose={close}
+      characterId={character.id}
     />
   ));
 
@@ -217,7 +237,7 @@ function Sheet({
             <Grid item xs={12} md={6}>
               <Section>
                 <Grid container item xs={12} spacing={3}>
-                  <Grid item xs={12} className={classes.alignCenter}>
+                  <Grid item xs={6} className={classes.alignCenter}>
                     <Image
                       src={getCharacterPictureURL()}
                       alt="Character Portrait"
@@ -225,6 +245,14 @@ function Sheet({
                       width={140}
                       height={200}
                     />
+                  </Grid>
+                  <Grid item xs={6} className={classes.alignCenter}>
+                    <Button
+                      variant="contained"
+                      onClick={() => diceRollModal.appear()}
+                    >
+                      ROLAR DADOS
+                    </Button>
                   </Grid>
                   <Grid item xs={12} className={classes.alignCenter}>
                     <Grid container item xs={12} className={classes.bar}>
