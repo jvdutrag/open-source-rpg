@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Head from 'next/head';
 import Queue from 'js-queue';
 
@@ -47,19 +47,13 @@ function Dice({
   classes,
   character
 }) {
-  const queue = new Queue();
+  const queue = useMemo(() => new Queue(), []);
 
   const [currentDice, setCurrentDice] = useState(null);
 
   useEffect(() => {
     document.body.style.backgroundColor = 'transparent';
   }, []);
-
-  if(!character) {
-    return (
-        <div>Personagem não existe!</div>
-    )
-  }
 
   function showDiceOnScreen(roll) {
     setCurrentDice(roll);
@@ -84,7 +78,13 @@ function Dice({
         queue.add(showDiceOnScreen.bind(queue, roll));
       });
     });
-  }, [socket]);
+  }, [character, queue]);
+
+  if(!character) {
+    return (
+        <div>Personagem não existe!</div>
+    )
+  }
 
   return (
     <React.Fragment>

@@ -107,13 +107,7 @@ function Portrait({
         current: character.current_hit_points,
         max: character.max_hit_points
       });
-    }, [character]);
-
-    if(!character) {
-      return (
-          <div>Personagem não existe!</div>
-      );
-    }
+    }, [character, showOptions]);
 
     useEffect(() => {
       socket.emit('room:join', `portrait_character_${character.id}`);
@@ -121,7 +115,13 @@ function Portrait({
       socket.on('update_hit_points', data => {
         updateHitPoints(data);
       });
-    }, [socket]);
+    }, [character]);
+
+    if(!character) {
+      return (
+          <div>Personagem não existe!</div>
+      );
+    }
 
     return (
       <React.Fragment>
@@ -135,6 +135,7 @@ function Portrait({
               height={600}
               layout="fixed"
               src={getCharacterPicture()}
+              alt=""
               className={isDead ? classes.deadPicture : ''}
             />
           </div>
