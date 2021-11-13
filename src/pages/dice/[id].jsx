@@ -34,18 +34,25 @@ export const getServerSideProps = async ({ params }) => {
     }
   }
 
+  const configs = await prisma.config.findMany();
+
   const serialized = JSON.parse(JSON.stringify(character));
 
   return {
     props: {
-        character: serialized
+        character: serialized,
+        config: {
+          diceOnScreenTimeoutInMS: parseInt(configs.find(config => config.name === 'DICE_ON_SCREEN_TIMEOUT_IN_MS').value),
+          timeBetweenDicesInMS: parseInt(configs.find(config => config.name === 'TIME_BETWEEN_DICES_IN_MS').value),
+        }
     }
   }
 }
 
 function Dice({
   classes,
-  character
+  character,
+  config
 }) {
   const queue = useMemo(() => new Queue(), []);
 
@@ -58,16 +65,14 @@ function Dice({
   function showDiceOnScreen(roll) {
     setCurrentDice(roll);
 
-    // Run After 5 seconds
     setTimeout(() => {
       // Remove Dice
       setCurrentDice(null);
-    }, 5 * 1000);
+    }, config.diceOnScreenTimeoutInMS);
 
-    // Run After 8 seconds
     setTimeout(() => {
       this.next();
-    }, 8 * 1000);
+    }, config.diceOnScreenTimeoutInMS + config.timeBetweenDicesInMS);
   }
 
   useEffect(() => {

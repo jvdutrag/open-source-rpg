@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { withStyles } from '@mui/styles';
-import { Grid, Container, Button } from '@mui/material';
+import { Grid, Container, Button, TextField } from '@mui/material';
 import {
   Add as AddIcon
 } from '@mui/icons-material';
@@ -20,6 +20,19 @@ import useModal from '../../hooks/useModal';
 const prisma = new PrismaClient();
 
 export const getServerSideProps = async () => {
+  function parseConfigs(array) {
+    return array.map(config => {
+      if(config.name === 'DICE_ON_SCREEN_TIMEOUT_IN_MS' || 'TIME_BETWEEN_DICES_IN_MS') {
+        return {
+          ...config,
+          value: parseInt(config.value) / 1000
+        }
+      }
+
+      return config;
+    });
+  }
+
   const characters = await prisma.character.findMany({
     orderBy: [
       {
@@ -44,15 +57,19 @@ export const getServerSideProps = async () => {
     ],
   });
 
+  const configs = await prisma.config.findMany();
+
   const serializedCharacters = JSON.parse(JSON.stringify(characters));
   const serializedAttributes = JSON.parse(JSON.stringify(attributes));
   const serializedSkills = JSON.parse(JSON.stringify(skills));
+  const serializedConfigs = JSON.parse(JSON.stringify(parseConfigs(configs)));
 
   return {
     props: {
       characters: serializedCharacters,
       attributes: serializedAttributes,
       skills: serializedSkills,
+      configs: serializedConfigs
     },
   };
 }
@@ -63,11 +80,36 @@ function Dashboard({
   characters,
   attributes,
   skills,
+  configs
 }) {
   const router = useRouter();
 
+  const [updatedConfigs, setUpdatedConfigs] = useState({
+    DICE_ON_SCREEN_TIMEOUT_IN_MS: null,
+    TIME_BETWEEN_DICES_IN_MS: null
+  });
+
+  useEffect(() => {
+    configs.forEach(config => {
+      setUpdatedConfigs(prevState => ({
+        ...prevState,
+        [config.name]: config.value
+      }));
+    });
+  }, [configs]);
+
   const refreshData = () => {
     return router.replace(router.asPath);
+  }
+
+  const updateConfigs = () => {
+    api.put('/config/DICE_ON_SCREEN_TIMEOUT_IN_MS', {
+      value: `${parseInt(updatedConfigs.DICE_ON_SCREEN_TIMEOUT_IN_MS) * 1000}`
+    });
+
+    api.put('/config/TIME_BETWEEN_DICES_IN_MS', {
+      value: `${parseInt(updatedConfigs.TIME_BETWEEN_DICES_IN_MS) * 1000}`
+    });
   }
 
   const confirmationModal = useModal(({ close, custom }) => (
@@ -244,6 +286,67 @@ function Dashboard({
                 ))}
               </Grid>
             </Section>
+          </Grid>
+
+          <Grid item xs={12}>
+            <Section
+              title="Configurações"
+            >
+              <Grid
+                item
+                container
+                xs={12}
+                spacing={2}
+              >
+                  <Grid container spacing={2} item xs={12}>
+                    <Grid item xs={12}>
+                      <h4>Integração com OBS</h4>
+                    </Grid>
+
+                    <Grid item xs={4}>
+                      <TextField
+                        fullWidth
+                        type="number"
+                        label="Tempo do dado em tela"
+                        helperText="Em segundos"
+                        value={updatedConfigs.DICE_ON_SCREEN_TIMEOUT_IN_MS}
+                        onChange={(e) => {
+                          const value = e.target.value;
+
+                          setUpdatedConfigs(prevState => ({
+                            ...prevState,
+                            DICE_ON_SCREEN_TIMEOUT_IN_MS: value
+                          }));
+                        }}
+                      />
+                    </Grid>
+
+                    <Grid item xs={4}>
+                      <TextField
+                        fullWidth
+                        type="number"
+                        label="Tempo entre cada dado"
+                        helperText="Em segundos"
+                        value={updatedConfigs.TIME_BETWEEN_DICES_IN_MS}
+                        onChange={(e) => {
+                          const value = e.target.value;
+
+                          setUpdatedConfigs(prevState => ({
+                            ...prevState,
+                            TIME_BETWEEN_DICES_IN_MS: value
+                          }));
+                        }}
+                      />
+                    </Grid>
+
+                    <Grid item xs={4}>
+                      <Button onClick={updateConfigs}>
+                        Salvar
+                      </Button>
+                    </Grid>
+                  </Grid>
+              </Grid>
+              </Section>
           </Grid>
         </Grid>
       </Container>

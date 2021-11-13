@@ -85,3 +85,11 @@ model Roll {
   
   @@map("roll")
 }
+
+model Config {
+  id Int @id @default(autoincrement())
+  name String @unique
+  value String?
+  
+  @@map("config")
+}
