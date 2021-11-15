@@ -19,5 +19,5 @@ Quando o projeto estiver minimamente finalizado, um guia será disponibilizado p
 ### Tecnologias sendo utilizadas
 - Next.JS com SSR (Server-Side Rendering) e API REST
 - Prisma como tecnologia ORM
-- Banco de dados relacional SQLite (porém o Prisma aceita qualquer outro)
+- Banco de dados relacional MySQL
 - Socket.io para comunicação em tempo real entre o servidor e o cliente
