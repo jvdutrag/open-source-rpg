@@ -9,7 +9,7 @@ import {
   Delete as DeleteIcon,
   Favorite as HeartIcon,
   FavoriteBorder as HeartIconNoLife,
-  Note as PaperIcon
+  VideoCameraFront as CameraIcon
 } from '@mui/icons-material';
 
 import useModal from '../hooks/useModal';
@@ -129,7 +129,7 @@ function CharacterBox({ classes, character, deleteCharacter, ...rest }) {
               target="_blank"
               className={classes.btn}
             >
-              <PaperIcon />
+              <LinkIcon />
             </Button>
           </div>
           <div>
@@ -138,7 +138,7 @@ function CharacterBox({ classes, character, deleteCharacter, ...rest }) {
               className={classes.btn}
               onClick={() => generatePortraitModal.appear({ characterId: character.id })}
             >
-              <LinkIcon />
+              <CameraIcon />
             </Button>
           </div>
           <div>

@@ -49,6 +49,14 @@ function GeneratePortraitModal({
         return url;	
     }
 
+    const getDiceURL = () => {
+        const baseURL = window.location.href.replace('/dashboard', '');
+
+        let url = `${baseURL}/dice/${characterId}`;
+
+        return url;	
+    }
+
     const copyURLToClipboard = url => {
         return copyToClipboard(url);
     }
@@ -59,13 +67,13 @@ function GeneratePortraitModal({
             onClose={handleClose}
         >
             <DialogTitle>
-                Gerar link de portrait para o OBS
+                Integração para o OBS
             </DialogTitle>
             <DialogContent>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
                         <span>
-                            Escolha o que deve ser mostrado no portrait:
+                            Link para o portrait (escolha o que deve ser mostrado):
                         </span>
                         <FormGroup>
                             <FormControlLabel control={<Checkbox defaultChecked onChange={e => setShowOptions(prevState => ({ ...prevState, name: e.target.checked }))} />} label="Nome" />
@@ -76,13 +84,33 @@ function GeneratePortraitModal({
                     <Grid item xs={12}>
                         <TextFieldIcon
                             variant="outlined"
-                            label="Link para o portrait"
+                            label="Link para o OBS"
                             type="text"
                             Icon={CopyIcon}
                             fullWidth
                             value={getPortraitURL()}
                             disabled
                             onClickIcon={() => copyURLToClipboard(getPortraitURL())}
+                        />
+                    </Grid>
+                </Grid>
+                <hr style={{ marginTop: '25px', marginBottom: '25px' }} />
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                        <span>
+                            Link para os dados em tela:
+                        </span>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextFieldIcon
+                            variant="outlined"
+                            label="Link para o OBS"
+                            type="text"
+                            Icon={CopyIcon}
+                            fullWidth
+                            value={getDiceURL()}
+                            disabled
+                            onClickIcon={() => copyURLToClipboard(getDiceURL())}
                         />
                     </Grid>
                 </Grid>
