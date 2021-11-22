@@ -94,7 +94,7 @@ function CharacterBox({ classes, character, deleteCharacter, ...rest }) {
         height={100}
       />
       <div className={classes.mainInformations}>
-        <span className={classes.characterName}>{character.name}</span>
+        <span className={classes.characterName}>{character.name} (ID: {character.id})</span>
         <div
           style={{
             display: 'flex',
