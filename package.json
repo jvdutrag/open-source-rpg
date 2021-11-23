@@ -6,7 +6,8 @@
     "dev": "node src/server.js",
     "build": "next build",
     "start": "node src/server.js",
-    "lint": "next lint"
+    "lint": "next lint",
+    "heroku-postbuild": "npx prisma migrate deploy && next build"
   },
   "prisma": {
     "schema": "src/prisma/schema.prisma"
