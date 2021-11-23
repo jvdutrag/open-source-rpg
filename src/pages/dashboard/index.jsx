@@ -112,6 +112,15 @@ function Dashboard({
     });
   }
 
+  const runInitialSetup = () => {
+    api.post('/setup')
+      .then(res => {
+        if(res.data.success) {
+          return window.location.reload();
+        }
+      });
+  }
+
   const confirmationModal = useModal(({ close, custom }) => (
     <ConfirmationModal
       title={custom.title}
@@ -174,180 +183,192 @@ function Dashboard({
         <Grid container item spacing={3}>
           <Header title="Dashboard do Mestre" />
 
-          <Grid item xs={12}>
-            <Section
-              title="Fichas e personagens"
-            >
-              <Grid item container xs={12} spacing={3}>
-                {characters.map((character, index) => (
-                  <Grid item xs={12} md={4} key={index}>
-                    <CharacterBox
-                      character={character}
-                      deleteCharacter={() =>
-                        confirmationModal.appear({
-                          title: 'Apagar personagem',
-                          text: 'Deseja apagar este personagem?',
-                          data: { id: character.id, type: 'character' },
-                        })
-                      }
-                    />
-                  </Grid>
-                ))}
-                <Grid item xs={12} md={4}>
-                  <AddBox onClick={() => createCharacterModal.appear()} />
+          {
+            configs.length > 0 ? (
+              <>
+                <Grid item xs={12}>
+                  <Section
+                    title="Fichas e personagens"
+                  >
+                    <Grid item container xs={12} spacing={3}>
+                      {characters.map((character, index) => (
+                        <Grid item xs={12} md={4} key={index}>
+                          <CharacterBox
+                            character={character}
+                            deleteCharacter={() =>
+                              confirmationModal.appear({
+                                title: 'Apagar personagem',
+                                text: 'Deseja apagar este personagem?',
+                                data: { id: character.id, type: 'character' },
+                              })
+                            }
+                          />
+                        </Grid>
+                      ))}
+                      <Grid item xs={12} md={4}>
+                        <AddBox onClick={() => createCharacterModal.appear()} />
+                      </Grid>
+                    </Grid>
+                  </Section>
                 </Grid>
-              </Grid>
-            </Section>
-          </Grid>
 
-          <Grid item xs={12} md={6}>
-            <Section
-              title="Atributos"
-              renderButton={() => (
-                <Button
-                  variant="outlined"
-                  style={{
-                    display: 'flex',
-                    alignSelf: 'center',
-                  }}
-                  onClick={() => attributeModal.appear({ operation: 'create' })}
-                >
-                  <AddIcon />
-                </Button>
-              )}
-            >
-              <Grid
-                item
-                container
-                xs={12}
-                spacing={2}
-                className={classes.scrollableBox}
-              >
-                {attributes.map((attribute, index) => (
-                  <Grid item xs={12} key={index}>
-                    <EditableRow
-                      data={attribute}
-                      editRow={(data) => {
-                        attributeModal.appear({ operation: 'edit', data });
-                      }}
-                      deleteRow={(data) => {
-                        confirmationModal.appear({
-                          title: 'Apagar atributo',
-                          text: 'Deseja apagar este atributo?',
-                          data: { id: data.id, type: 'attribute' },
-                        });
-                      }}
-                    />
-                  </Grid>
-                ))}
-              </Grid>
-            </Section>
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <Section
-              title="Perícias"
-              renderButton={() => (
-                <Button
-                  variant="outlined"
-                  style={{
-                    display: 'flex',
-                    alignSelf: 'center',
-                  }}
-                  onClick={() => skillModal.appear({ operation: 'create' })}
-                >
-                  <AddIcon />
-                </Button>
-              )}
-            >
-              <Grid
-                item
-                container
-                xs={12}
-                spacing={2}
-                className={classes.scrollableBox}
-              >
-                {skills.map((skill, index) => (
-                  <Grid item xs={12} key={index}>
-                    <EditableRow
-                      data={skill}
-                      editRow={(data) => {
-                        skillModal.appear({ operation: 'edit', data })
-                      }}
-                      deleteRow={(data) => {
-                        confirmationModal.appear({
-                          title: 'Apagar perícia',
-                          text: 'Deseja apagar esta perícia?',
-                          data: { id: data.id, type: 'skill' },
-                        });
-                      }}
-                    />
-                  </Grid>
-                ))}
-              </Grid>
-            </Section>
-          </Grid>
-
-          <Grid item xs={12}>
-            <Section
-              title="Configurações"
-            >
-              <Grid
-                item
-                container
-                xs={12}
-                spacing={2}
-              >
-                  <Grid container spacing={2} item xs={12}>
-                    <Grid item xs={12}>
-                      <h4>Integração com OBS</h4>
-                    </Grid>
-
-                    <Grid item xs={4}>
-                      <TextField
-                        fullWidth
-                        type="number"
-                        label="Tempo do dado em tela"
-                        helperText="Em segundos"
-                        value={updatedConfigs.DICE_ON_SCREEN_TIMEOUT_IN_MS}
-                        onChange={(e) => {
-                          const value = e.target.value;
-
-                          setUpdatedConfigs(prevState => ({
-                            ...prevState,
-                            DICE_ON_SCREEN_TIMEOUT_IN_MS: value
-                          }));
+                <Grid item xs={12} md={6}>
+                  <Section
+                    title="Atributos"
+                    renderButton={() => (
+                      <Button
+                        variant="outlined"
+                        style={{
+                          display: 'flex',
+                          alignSelf: 'center',
                         }}
-                      />
-                    </Grid>
-
-                    <Grid item xs={4}>
-                      <TextField
-                        fullWidth
-                        type="number"
-                        label="Tempo entre cada dado"
-                        helperText="Em segundos"
-                        value={updatedConfigs.TIME_BETWEEN_DICES_IN_MS}
-                        onChange={(e) => {
-                          const value = e.target.value;
-
-                          setUpdatedConfigs(prevState => ({
-                            ...prevState,
-                            TIME_BETWEEN_DICES_IN_MS: value
-                          }));
-                        }}
-                      />
-                    </Grid>
-
-                    <Grid item xs={4}>
-                      <Button onClick={updateConfigs}>
-                        Salvar
+                        onClick={() => attributeModal.appear({ operation: 'create' })}
+                      >
+                        <AddIcon />
                       </Button>
+                    )}
+                  >
+                    <Grid
+                      item
+                      container
+                      xs={12}
+                      spacing={2}
+                      className={classes.scrollableBox}
+                    >
+                      {attributes.map((attribute, index) => (
+                        <Grid item xs={12} key={index}>
+                          <EditableRow
+                            data={attribute}
+                            editRow={(data) => {
+                              attributeModal.appear({ operation: 'edit', data });
+                            }}
+                            deleteRow={(data) => {
+                              confirmationModal.appear({
+                                title: 'Apagar atributo',
+                                text: 'Deseja apagar este atributo?',
+                                data: { id: data.id, type: 'attribute' },
+                              });
+                            }}
+                          />
+                        </Grid>
+                      ))}
                     </Grid>
-                  </Grid>
+                  </Section>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <Section
+                    title="Perícias"
+                    renderButton={() => (
+                      <Button
+                        variant="outlined"
+                        style={{
+                          display: 'flex',
+                          alignSelf: 'center',
+                        }}
+                        onClick={() => skillModal.appear({ operation: 'create' })}
+                      >
+                        <AddIcon />
+                      </Button>
+                    )}
+                  >
+                    <Grid
+                      item
+                      container
+                      xs={12}
+                      spacing={2}
+                      className={classes.scrollableBox}
+                    >
+                      {skills.map((skill, index) => (
+                        <Grid item xs={12} key={index}>
+                          <EditableRow
+                            data={skill}
+                            editRow={(data) => {
+                              skillModal.appear({ operation: 'edit', data })
+                            }}
+                            deleteRow={(data) => {
+                              confirmationModal.appear({
+                                title: 'Apagar perícia',
+                                text: 'Deseja apagar esta perícia?',
+                                data: { id: data.id, type: 'skill' },
+                              });
+                            }}
+                          />
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </Section>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Section
+                    title="Configurações"
+                  >
+                    <Grid
+                      item
+                      container
+                      xs={12}
+                      spacing={2}
+                    >
+                        <Grid container spacing={2} item xs={12}>
+                          <Grid item xs={12}>
+                            <h4>Integração com OBS</h4>
+                          </Grid>
+
+                          <Grid item xs={4}>
+                            <TextField
+                              fullWidth
+                              type="number"
+                              label="Tempo do dado em tela"
+                              helperText="Em segundos"
+                              value={updatedConfigs.DICE_ON_SCREEN_TIMEOUT_IN_MS}
+                              onChange={(e) => {
+                                const value = e.target.value;
+
+                                setUpdatedConfigs(prevState => ({
+                                  ...prevState,
+                                  DICE_ON_SCREEN_TIMEOUT_IN_MS: value
+                                }));
+                              }}
+                            />
+                          </Grid>
+
+                          <Grid item xs={4}>
+                            <TextField
+                              fullWidth
+                              type="number"
+                              label="Tempo entre cada dado"
+                              helperText="Em segundos"
+                              value={updatedConfigs.TIME_BETWEEN_DICES_IN_MS}
+                              onChange={(e) => {
+                                const value = e.target.value;
+
+                                setUpdatedConfigs(prevState => ({
+                                  ...prevState,
+                                  TIME_BETWEEN_DICES_IN_MS: value
+                                }));
+                              }}
+                            />
+                          </Grid>
+
+                          <Grid item xs={4}>
+                            <Button variant="contained" onClick={updateConfigs}>
+                              Salvar
+                            </Button>
+                          </Grid>
+                        </Grid>
+                    </Grid>
+                    </Section>
+                </Grid>
+              </>
+            ) : (
+              <Grid item xs={12}>
+                  <Button variant="contained" onClick={runInitialSetup} fullWidth>
+                    REALIZAR CONFIGURAÇÃO INICIAL
+                  </Button>
               </Grid>
-              </Section>
-          </Grid>
+            )
+          }
         </Grid>
       </Container>
     </>
