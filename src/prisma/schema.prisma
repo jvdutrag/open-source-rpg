@@ -17,6 +17,8 @@ model Character {
   max_hit_points Int @default(0)
   current_picture Int @default(1)
   is_dead Boolean @default(false)
+  standard_character_picture_url String?
+  injured_character_picture_url String?
 
   created_at DateTime @default(now())
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 import { Grid, Container, Button } from '@mui/material';
 import { withStyles } from '@mui/styles';
@@ -13,7 +14,7 @@ import socket from '../../utils/socket';
 import {
   Header, Section, StatusBar, SheetEditableRow, 
 
-  DiceRollModal, StatusBarModal
+  DiceRollModal, StatusBarModal, ChangePictureModal
 } from '../../components';
 
 import {
@@ -74,6 +75,12 @@ function Sheet({
   classes,
   rawCharacter
 }) {
+  const router = useRouter();
+
+  const refreshData = () => {
+    return router.replace(router.asPath);
+  }
+
   const [character, setCharacter] = useState(rawCharacter);
 
   const onCharacterInfoSubmit = async values => {
@@ -155,6 +162,14 @@ function Sheet({
     />
   ));
 
+  const changePictureModal = useModal(({ close }) => (
+    <ChangePictureModal
+      onPictureChange={() => refreshData()}
+      handleClose={close}
+      character={character}
+    />
+  ));
+
   const updateCharacterAttributeValue = (attribute, value) => {
     const index = character.attributes.findIndex(a => a.attribute_id === attribute.attribute_id);
 
@@ -192,16 +207,16 @@ function Sheet({
       return null;
     }
 
-    let pictureNumber;
-
-    if(character.current_hit_points > (character.max_hit_points / 2)) {
-      pictureNumber = 1;
+    if(character.standard_character_picture_url && character.injured_character_picture_url) {
+      if(character.current_hit_points > (character.max_hit_points / 2)) {
+        return character.standard_character_picture_url;
+      }
+      else {
+        return character.injured_character_picture_url;
+      }
+    } else {
+      return `/assets/user.png`
     }
-    else {
-      pictureNumber = 2;
-    }
-
-    return `/assets/characters/${character.id}/${pictureNumber}.png`;
   }
 
   if(!rawCharacter) {
@@ -244,6 +259,7 @@ function Sheet({
                       className={classes.characterImage}
                       width={140}
                       height={200}
+                      onClick={() => changePictureModal.appear()}
                     />
                   </Grid>
                   <Grid item xs={6} className={classes.alignCenter}>
@@ -353,7 +369,8 @@ function Sheet({
 const styles = (theme) => ({
   characterImage: {
     width: '200px',
-    borderRadius: '50%'
+    borderRadius: '50%',
+    cursor: 'pointer'
   },
 
   alignCenter: {

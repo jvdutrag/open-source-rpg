@@ -11,6 +11,7 @@ import StatusBarModal from './modals/StatusBarModal'
 import InfoModal from './modals/InfoModal'
 import GeneratePortraitModal from './modals/GeneratePortraitModal'
 import DiceRollModal from './modals/DiceRollModal'
+import ChangePictureModal from './modals/ChangePictureModal'
 
 import EditableRow from './EditableRow'
 import SheetEditableRow from './SheetEditableRow'
@@ -35,6 +36,7 @@ export {
     InfoModal,
     GeneratePortraitModal,
     DiceRollModal,
+    ChangePictureModal,
 
     EditableRow,
     Loader,

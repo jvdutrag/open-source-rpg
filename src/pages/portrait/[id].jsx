@@ -79,16 +79,16 @@ function Portrait({
     }
 
     const getCharacterPicture = () => {
-      let pictureNumber;
-
-      if(hitPoints.current > (hitPoints.max / 2)) {
-        pictureNumber = 1;
+      if(character.standard_character_picture_url && character.injured_character_picture_url) {
+        if(hitPoints.current > (hitPoints.max / 2)) {
+          return character.standard_character_picture_url;
+        }
+        else {
+          return character.injured_character_picture_url;
+        }
+      } else {
+        return `/assets/user.png`
       }
-      else {
-        pictureNumber = 2;
-      }
-
-      return `/assets/characters/${character.id}/${pictureNumber}.png`;
     }
 
     useEffect(() => {
