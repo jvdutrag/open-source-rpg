@@ -62,20 +62,20 @@ function Dice({
     document.body.style.backgroundColor = 'transparent';
   }, []);
 
-  function showDiceOnScreen(roll) {
-    setCurrentDice(roll);
-
-    setTimeout(() => {
-      // Remove Dice
-      setCurrentDice(null);
-    }, config.diceOnScreenTimeoutInMS);
-
-    setTimeout(() => {
-      this.next();
-    }, config.diceOnScreenTimeoutInMS + config.timeBetweenDicesInMS);
-  }
-
   useEffect(() => {
+    function showDiceOnScreen(roll) {
+      setCurrentDice(roll);
+  
+      setTimeout(() => {
+        // Remove Dice
+        setCurrentDice(null);
+      }, config.diceOnScreenTimeoutInMS);
+  
+      setTimeout(() => {
+        this.next();
+      }, config.diceOnScreenTimeoutInMS + config.timeBetweenDicesInMS);
+    }
+
     socket.emit('room:join', `dice_character_${character.id}`);
 
     socket.on('dice_roll', data => {
@@ -83,7 +83,7 @@ function Dice({
         queue.add(showDiceOnScreen.bind(queue, roll));
       });
     });
-  }, [character, queue]);
+  }, [character, queue, config]);
 
   if(!character) {
     return (
