@@ -9,6 +9,9 @@
     "lint": "next lint",
     "heroku-postbuild": "npx prisma migrate deploy && next build"
   },
+  "engines": {
+    "node": "14.x"
+  },
   "prisma": {
     "schema": "src/prisma/schema.prisma"
   },
