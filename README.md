@@ -1,5 +1,7 @@
 # Open Source RPG
 
+Tutorial: https://www.twitch.tv/videos/1215083891
+
 ## Sobre
 O projeto visa criar um sistema via web/navegador de RPG, semelhante e inspirado no usado pela série de RPG [Ordem Paranormal](https://ordemparanormal.com.br/), com integrações em stream, criação de personagens, painel para o mestre, etc. É almejado o público leigo: então não necessariamente você vai precisar saber programar para utilizar o sistema.
 
