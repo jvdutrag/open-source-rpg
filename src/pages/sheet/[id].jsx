@@ -5,7 +5,6 @@ import { useRouter } from 'next/router';
 
 import { Grid, Container, Button } from '@mui/material';
 import { withStyles } from '@mui/styles';
-import { PrismaClient } from '@prisma/client';
 
 import { api } from '../../utils';
 
@@ -23,7 +22,7 @@ import {
 
 import useModal from '../../hooks/useModal';
 
-const prisma = new PrismaClient();
+import { prisma } from '../../database';
 
 export const getServerSideProps = async ({ params }) => {
   const characterId = isNaN(params.id) ? null : Number(params.id);
