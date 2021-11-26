@@ -3,11 +3,10 @@ import Head from 'next/head';
 import Queue from 'js-queue';
 
 import { withStyles } from '@mui/styles';
-import { PrismaClient } from '@prisma/client';
 
 import socket from '../../utils/socket';
 
-const prisma = new PrismaClient();
+import { prisma } from '../../database';
 
 export const getServerSideProps = async ({ params }) => {
   const characterId = isNaN(params.id) ? null : Number(params.id);
