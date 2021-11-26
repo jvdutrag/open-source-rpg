@@ -25,6 +25,6 @@ Quando o projeto estiver minimamente finalizado, um guia será disponibilizado p
 - Socket.io para comunicação em tempo real entre o servidor e o cliente
 
 ### Instalação local via Docker
-- Instale o Docker e o Docker compose e rode o comando: docker-compose run app next build && docker-compose up -d
+- Instale o Docker e o Docker compose e rode o comando: docker-compose run rpg npx prisma migrate deploy && docker-compose run app next build && docker-compose up -d
 
 - Acesse o endereço: http://127.0.0.1:3000
