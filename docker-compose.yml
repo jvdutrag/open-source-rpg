@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  mysqldb:
+    image: mysql:5.7
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQLDB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQLDB_DATABASE}
+    ports:
+      - ${MYSQLDB_LOCAL_PORT}:3306
+    volumes:
+      - db:/var/lib/mysql
+  app:
+    depends_on:
+      - mysqldb
+    build: .
+    restart: unless-stopped
+    ports:
+      - ${PORT}:3000
+    environment:
+      - DB_HOST=mysqldb
+      - DB_USER=${MYSQLDB_USER}
+      - DB_PASSWORD=${MYSQLDB_ROOT_PASSWORD}
+      - DB_NAME=${MYSQLDB_DATABASE}
+      - DB_PORT=${MYSQLDB_DOCKER_PORT}
+      - DB_PROVIDER_URL=${DB_PROVIDER_URL}
+    stdin_open: true
+    tty: true
+
+volumes: 
+  db:
