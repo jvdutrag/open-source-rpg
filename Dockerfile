@@ -1,4 +1,4 @@
-FROM node:17
+FROM node:alpine
 
 WORKDIR /rpg
 COPY package.json .
