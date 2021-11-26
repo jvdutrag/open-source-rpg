@@ -11,7 +11,7 @@ services:
       - ${MYSQLDB_LOCAL_PORT}:3306
     volumes:
       - db:/var/lib/mysql
-  app:
+  rpg:
     depends_on:
       - mysqldb
     build: .
@@ -25,6 +25,8 @@ services:
       - DB_NAME=${MYSQLDB_DATABASE}
       - DB_PORT=${MYSQLDB_DOCKER_PORT}
       - DB_PROVIDER_URL=${DB_PROVIDER_URL}
+    volumes:
+      - .:/rpg
     stdin_open: true
     tty: true
 
