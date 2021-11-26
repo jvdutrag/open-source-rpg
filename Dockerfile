@@ -1,7 +1,9 @@
-FROM node:alpine
+FROM node:lts-bullseye-slim
 
 WORKDIR /rpg
 COPY package.json .
 RUN npm install
 COPY . .
-CMD npm i && npm start
+RUN npx prisma generate
+RUN node_modules/.bin/next build 
+CMD node_modules/.bin/next start
