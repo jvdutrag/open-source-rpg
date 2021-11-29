@@ -1,8 +1,16 @@
-import { prisma } from '../../../database';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
     if(req.method === 'DELETE') {
         const id = Number(req.query.id);
+
+        const deleteRolls = prisma.roll.deleteMany({
+            where: { 
+                character_id: id
+            }
+        })
 
         const deleteAttributes = prisma.characterAttributes.deleteMany({
             where: {
@@ -22,7 +30,7 @@ export default async function handler(req, res) {
             }
         });
 
-        await prisma.$transaction([deleteAttributes, deleteSkills, deleteCharacter]);
+        await prisma.$transaction([deleteRolls, deleteAttributes, deleteSkills, deleteCharacter]);
 
         return res.status(200).json({ success: true });
     }
