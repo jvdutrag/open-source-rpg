@@ -12,12 +12,10 @@ import { Header, Section, CharacterBox, AddBox,
   AttributeModal, SkillModal
 } from '../../components';
 
-import { PrismaClient } from '@prisma/client';
-
 import { api } from '../../utils';
 import useModal from '../../hooks/useModal';
 
-const prisma = new PrismaClient();
+import { prisma } from '../../database';
 
 export const getServerSideProps = async () => {
   function parseConfigs(array) {

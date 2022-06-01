@@ -4,11 +4,10 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 import { withStyles } from '@mui/styles';
-import { PrismaClient } from '@prisma/client';
 
 import socket from '../../utils/socket';
 
-const prisma = new PrismaClient();
+import { prisma } from '../../database';
 
 export const getServerSideProps = async ({ params }) => {
   const characterId = isNaN(params.id) ? null : Number(params.id);
@@ -159,7 +158,7 @@ const styles = (theme) => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    fontFamily: 'Fruktur'
+    fontFamily: 'Perpetua Regular'
   },
 
   name: {

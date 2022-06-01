@@ -51,6 +51,8 @@ function StatusBarModal({
     const getTitle = () => {
         switch (type) {
             case 'hp': return 'Alterar pontos de vida';
+            case 'san': return 'Alterar pontos de sanidade';
+            case 'ocult': return 'Alterar pontos de ocultismo';
             default: return 'Alterar pontos';
         }
     }

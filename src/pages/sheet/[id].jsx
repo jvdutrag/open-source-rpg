@@ -5,7 +5,6 @@ import { useRouter } from 'next/router';
 
 import { Grid, Container, Button } from '@mui/material';
 import { withStyles } from '@mui/styles';
-import { PrismaClient } from '@prisma/client';
 
 import { api } from '../../utils';
 
@@ -23,7 +22,7 @@ import {
 
 import useModal from '../../hooks/useModal';
 
-const prisma = new PrismaClient();
+import { prisma } from '../../database';
 
 export const getServerSideProps = async ({ params }) => {
   const characterId = isNaN(params.id) ? null : Number(params.id);
@@ -119,6 +118,54 @@ function Sheet({
     });
   }
 
+  const onSanPointsModalSubmit = async newData => {
+    return new Promise((resolve, reject) => {
+      const data = {
+        san_points: Number(newData.current),
+        max_san_points: Number(newData.max)
+      }
+
+      api
+        .put(`/character/${character.id}`, data)
+        .then(() => {
+          updateCharacterState(data);
+
+          resolve();
+
+          socket.emit('update_san_points', { character_id: character.id, current: data.san_points, max: data.max_san_points });
+        })
+        .catch(err => {
+          alert(`Erro ao atualizar a Sanidade!`, err);
+
+          reject();
+        });
+    });
+  }
+
+  const onOcultPointsModalSubmit = async newData => {
+    return new Promise((resolve, reject) => {
+      const data = {
+        ocult_points: Number(newData.current),
+        max_ocult_points: Number(newData.max)
+      }
+
+      api
+        .put(`/character/${character.id}`, data)
+        .then(() => {
+          updateCharacterState(data);
+
+          resolve();
+
+          socket.emit('update_san_points', { character_id: character.id, current: data.ocult_points, max: data.max_ocult_points });
+        })
+        .catch(err => {
+          alert(`Erro ao atualizar O Ocultismo!`, err);
+
+          reject();
+        });
+    });
+  }
+
   useEffect(() => {
     setCharacter(rawCharacter);
   }, [rawCharacter]);
@@ -140,6 +187,34 @@ function Sheet({
       data={{
         current: character.current_hit_points,
         max: character.max_hit_points
+      }}
+    />
+  ));
+
+  const sanPointsModal = useModal(({ close }) => (
+    <StatusBarModal
+      type="san"
+      onSubmit={async newData => {
+        onSanPointsModalSubmit(newData).then(() => close());
+      }}
+      handleClose={close}
+      data={{
+        current: character.san_points,
+        max: character.max_san_points
+      }}
+    />
+  ));
+
+  const ocultPointsModal = useModal(({ close }) => (
+    <StatusBarModal
+      type="ocult"
+      onSubmit={async newData => {
+        onOcultPointsModalSubmit(newData).then(() => close());
+      }}
+      handleClose={close}
+      data={{
+        current: character.ocult_points,
+        max: character.max_ocult_points
       }}
     />
   ));
@@ -284,6 +359,44 @@ function Sheet({
                           secondaryColor="#4d0321"
                           onClick={() => {
                             hitPointsModal.appear();
+                          }}
+                        />
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={12} className={classes.alignCenter}>
+                    <Grid container item xs={12} className={classes.bar}>
+                      <Grid item xs={12} className={classes.barTitle}>
+                        <span>Sanidade</span>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <StatusBar
+                          current={character.san_points}
+                          max={character.max_san_points}
+                          label={`${character.san_points}/${character.max_san_points}`}
+                          primaryColor="#BF40BF"
+                          secondaryColor="#702963"
+                          onClick={() => {
+                            sanPointsModal.appear();
+                          }}
+                        />
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={12} className={classes.alignCenter}>
+                    <Grid container item xs={12} className={classes.bar}>
+                      <Grid item xs={12} className={classes.barTitle}>
+                        <span>Ocultismo</span>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <StatusBar
+                          current={character.ocult_points}
+                          max={character.max_ocult_points}
+                          label={`${character.ocult_points}/${character.max_ocult_points}`}
+                          primaryColor="#FFFF00"
+                          secondaryColor="#DAA520"
+                          onClick={() => {
+                            ocultPointsModal.appear();
                           }}
                         />
                       </Grid>

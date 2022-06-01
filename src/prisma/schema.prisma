@@ -19,6 +19,11 @@ model Character {
   is_dead Boolean @default(false)
   standard_character_picture_url String?
   injured_character_picture_url String?
+  san_points Int @default(0)
+  max_san_points Int @default(0)
+  ocult_points Int @default(0)
+  max_ocult_points Int @default(0)
+  
 
   created_at DateTime @default(now())
 
